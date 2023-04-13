@@ -4,7 +4,7 @@ import { AppProps } from 'next/app';
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
 
-import Layout from '@/components/ui_deprecated/Layout';
+import Layout from '@/components_deprecated/ui/Layout';
 import { MyUserContextProvider } from '@/utils/useUser';
 import type { Database } from '@/components/types_db';
 

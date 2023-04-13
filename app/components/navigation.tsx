@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import Button from '@/components/ui/button';
+import Button from '@/lib/ui/button';
 import Image from 'next/image';
 
 import Favicon from '@/public/favicon.ico';

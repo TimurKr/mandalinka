@@ -4,8 +4,8 @@ import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 
-import LoadingDots from '@/components/ui_deprecated/LoadingDots';
-import Logo from '@/components/icons_deprecated/Logo';
+import LoadingDots from '@/components_deprecated/ui/LoadingDots';
+import Logo from '@/components_deprecated/icons/Logo';
 import { getURL } from '@/utils/helpers';
 
 const SignIn = () => {

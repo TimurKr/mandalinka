@@ -1,6 +1,6 @@
 import { GetStaticPropsResult } from 'next';
 
-import Pricing from '@/components/ui_deprecated/Pricing';
+import Pricing from '@/components_deprecated/ui/Pricing';
 import { getActiveProductsWithPrices } from '@/utils/supabase-client';
 import { Product } from 'types';
 

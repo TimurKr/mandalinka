@@ -2,8 +2,8 @@ import { PropsWithChildren } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
-import Navbar from '@/components/ui_deprecated/Navbar';
-import Footer from '@/components/ui_deprecated/Footer';
+import Navbar from '@/components_deprecated/ui/Navbar';
+import Footer from '@/components_deprecated/ui/Footer';
 
 import { PageMeta } from '../../types';
 

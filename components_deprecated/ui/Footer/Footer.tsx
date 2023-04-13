@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
-import Logo from '@/components/icons_deprecated/Logo';
-import GitHub from '@/components/icons_deprecated/GitHub';
+import Logo from '@/components_deprecated/icons/Logo';
+import GitHub from '@/components_deprecated/icons/GitHub';
 
 import s from './Footer.module.css';
 

@@ -2,7 +2,7 @@ import cn from 'classnames';
 import React, { forwardRef, useRef, ButtonHTMLAttributes } from 'react';
 import { mergeRefs } from 'react-merge-refs';
 
-import LoadingDots from '@/components/ui_deprecated/LoadingDots';
+import LoadingDots from '@/components_deprecated/ui/LoadingDots';
 
 import styles from './Button.module.css';
 

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import cn from 'classnames';
 
-import Button from '@/components/ui_deprecated/Button';
+import Button from '@/components_deprecated/ui/Button';
 import { postData } from '@/utils/helpers';
 import { getStripe } from '@/utils/stripe-client';
 import { useUser } from '@/utils/useUser';

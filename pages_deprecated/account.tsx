@@ -6,8 +6,8 @@ import {
   User,
 } from '@supabase/auth-helpers-nextjs';
 
-import LoadingDots from '@/components/ui_deprecated/LoadingDots';
-import Button from '@/components/ui_deprecated/Button';
+import LoadingDots from '@/components_deprecated/ui/LoadingDots';
+import Button from '@/components_deprecated/ui/Button';
 import { useUser } from '@/utils/useUser';
 import { postData } from '@/utils/helpers';
 
