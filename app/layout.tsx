@@ -1,15 +1,13 @@
 import './globals.css';
 
-import { Lora } from 'next/font/google';
-
 import 'material-symbols/outlined.css';
 import 'material-symbols/rounded.css';
 import 'react-datetime/css/react-datetime.css';
-
 import 'flowbite/dist/flowbite.min.css';
 
-// import 'styles/main.css';
-// import 'styles/chrome-bug.css';
+import { Lora } from 'next/font/google';
+
+import SupabaseProvider from './components/supabase-provider';
 
 const font = Lora({
   subsets: ['latin-ext'],
@@ -34,7 +32,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="sk" className={font.className}>
-      <body>{children}</body>
+      <body>
+        <SupabaseProvider>{children}</SupabaseProvider>
+      </body>
     </html>
   );
 }

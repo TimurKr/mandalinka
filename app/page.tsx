@@ -1,9 +1,9 @@
-import LandingPage from "./components/landing-page";
+import LandingPage from './components/landing-page';
 
-export default function Home() {
+export default async function Page() {
   return (
-    <div>
+    <>
       <LandingPage />
-    </div>
+    </>
   );
 }

@@ -4,7 +4,7 @@
 
 @layer components {
   .btn {
-    @apply block w-full rounded-full px-3 py-1 text-center shadow-md transition-all duration-300 hover:shadow-xl focus:shadow-xl disabled:opacity-50 disabled:shadow-none sm:text-sm;
+    @apply block w-full rounded-full px-3 py-1 text-center shadow-md transition-all duration-300 hover:shadow-xl focus:shadow-xl disabled:opacity-50 disabled:shadow-none sm:text-sm !important;
   }
   .btn-primary {
     @apply border border-primary text-primary transition-all duration-300 checked:bg-primary checked:text-black hover:bg-primary hover:text-black disabled:hover:bg-inherit disabled:hover:text-primary;
@@ -42,8 +42,4 @@
   .btn-danger-dark {
     @apply border border-transparent bg-danger text-white transition-all duration-300 checked:border checked:border-danger checked:text-danger hover:border hover:border-danger hover:bg-transparent hover:text-danger disabled:hover:border-none disabled:hover:bg-danger disabled:hover:text-white;
   }
-}
-
-body.loading * {
-  transition: none !important;
 }
