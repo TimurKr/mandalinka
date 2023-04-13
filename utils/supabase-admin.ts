@@ -129,8 +129,8 @@ const manageSubscriptionStatusChange = async (
       id: subscription.id,
       user_id: uuid,
       metadata: subscription.metadata,
-      status: subscription.status,
-      price_id: subscription.items.data[0].price.id,
+      status: subscription.status != "paused" ? subscription.status : "canceled", // TODO: This is just a temporary patch
+      price_id: subscription.items.data[0].price.id ,
       //TODO check quantity on subscription
       // @ts-ignore
       quantity: subscription.quantity,
