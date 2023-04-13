@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { GetServerSidePropsContext } from 'next';
 import {
   createServerSupabaseClient,
-  User
+  User,
 } from '@supabase/auth-helpers-nextjs';
 
 import LoadingDots from '@/components/ui/LoadingDots';
@@ -36,22 +36,22 @@ function Card({ title, description, footer, children }: Props) {
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   const supabase = createServerSupabaseClient(ctx);
   const {
-    data: { session }
+    data: { session },
   } = await supabase.auth.getSession();
 
   if (!session)
     return {
       redirect: {
         destination: '/signin',
-        permanent: false
-      }
+        permanent: false,
+      },
     };
 
   return {
     props: {
       initialSession: session,
-      user: session.user
-    }
+      user: session.user,
+    },
   };
 };
 
@@ -63,7 +63,7 @@ export default function Account({ user }: { user: User }) {
     setLoading(true);
     try {
       const { url, error } = await postData({
-        url: '/api/create-portal-link'
+        url: '/api/create-portal-link',
       });
       window.location.assign(url);
     } catch (error) {
@@ -77,7 +77,7 @@ export default function Account({ user }: { user: User }) {
     new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: subscription?.prices?.currency,
-      minimumFractionDigits: 0
+      minimumFractionDigits: 0,
     }).format((subscription?.prices?.unit_amount || 0) / 100);
 
   return (
