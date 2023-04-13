@@ -1,6 +1,6 @@
 import { GetStaticPropsResult } from 'next';
 
-import Pricing from '@/components/Pricing';
+import Pricing from '@/components/ui_deprecated/Pricing';
 import { getActiveProductsWithPrices } from '@/utils/supabase-client';
 import { Product } from 'types';
 
@@ -17,8 +17,8 @@ export async function getStaticProps(): Promise<GetStaticPropsResult<Props>> {
 
   return {
     props: {
-      products
+      products,
     },
-    revalidate: 60
+    revalidate: 60,
   };
 }

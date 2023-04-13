@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 
-import Logo from '@/components/icons/Logo';
+import Logo from '@/components/icons_deprecated/Logo';
 import { useUser } from '@/utils/useUser';
 
 import s from './Navbar.module.css';
@@ -18,12 +18,12 @@ const Navbar = () => {
         Skip to content
       </a>
       <div className="mx-auto max-w-6xl px-6">
-        <div className="flex justify-between align-center flex-row py-4 md:py-6 relative">
+        <div className="align-center relative flex flex-row justify-between py-4 md:py-6">
           <div className="flex flex-1 items-center">
             <Link href="/" className={s.logo} aria-label="Logo">
               <Logo />
             </Link>
-            <nav className="space-x-2 ml-6 hidden lg:block">
+            <nav className="ml-6 hidden space-x-2 lg:block">
               <Link href="/" className={s.link}>
                 Pricing
               </Link>

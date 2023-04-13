@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import Button from '@/components/button';
+import Button from '@/components/ui/button';
 import Image from 'next/image';
 
 import Favicon from '@/public/favicon.ico';
@@ -25,7 +25,7 @@ export default function Navigation() {
       </div>
       <ol className="flex flex-col items-center sm:flex-row">
         {pages.map(([name, href]) => (
-          <li className="py-2 px-2" key={name}>
+          <li className="px-2 py-2" key={name}>
             <Button href={href} variant="black">
               {name}
             </Button>

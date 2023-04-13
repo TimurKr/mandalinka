@@ -4,8 +4,8 @@ import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { Auth } from '@supabase/auth-ui-react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 
-import LoadingDots from '@/components/ui/LoadingDots';
-import Logo from '@/components/icons/Logo';
+import LoadingDots from '@/components/ui_deprecated/LoadingDots';
+import Logo from '@/components/icons_deprecated/Logo';
 import { getURL } from '@/utils/helpers';
 
 const SignIn = () => {
@@ -21,8 +21,8 @@ const SignIn = () => {
 
   if (!user)
     return (
-      <div className="flex justify-center height-screen-helper">
-        <div className="flex flex-col justify-between max-w-lg p-3 m-auto w-80 ">
+      <div className="height-screen-helper flex justify-center">
+        <div className="m-auto flex w-80 max-w-lg flex-col justify-between p-3 ">
           <div className="flex justify-center pb-12 ">
             <Logo width="64px" height="64px" />
           </div>
@@ -38,10 +38,10 @@ const SignIn = () => {
                   default: {
                     colors: {
                       brand: '#404040',
-                      brandAccent: '#52525b'
-                    }
-                  }
-                }
+                      brandAccent: '#52525b',
+                    },
+                  },
+                },
               }}
               theme="dark"
             />

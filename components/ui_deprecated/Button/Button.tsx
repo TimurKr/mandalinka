@@ -2,7 +2,7 @@ import cn from 'classnames';
 import React, { forwardRef, useRef, ButtonHTMLAttributes } from 'react';
 import { mergeRefs } from 'react-merge-refs';
 
-import LoadingDots from '@/components/ui/LoadingDots';
+import LoadingDots from '@/components/ui_deprecated/LoadingDots';
 
 import styles from './Button.module.css';
 
@@ -33,7 +33,7 @@ const Button = forwardRef<HTMLButtonElement, Props>((props, buttonRef) => {
     {
       [styles.slim]: variant === 'slim',
       [styles.loading]: loading,
-      [styles.disabled]: disabled
+      [styles.disabled]: disabled,
     },
     className
   );
@@ -46,13 +46,13 @@ const Button = forwardRef<HTMLButtonElement, Props>((props, buttonRef) => {
       disabled={disabled}
       style={{
         width,
-        ...style
+        ...style,
       }}
       {...rest}
     >
       {children}
       {loading && (
-        <i className="pl-2 m-0 flex">
+        <i className="m-0 flex pl-2">
           <LoadingDots />
         </i>
       )}

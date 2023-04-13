@@ -4,9 +4,9 @@ import { AppProps } from 'next/app';
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
 
-import Layout from '@/components/Layout';
+import Layout from '@/components/ui_deprecated/Layout';
 import { MyUserContextProvider } from '@/utils/useUser';
-import type { Database } from 'types_db';
+import type { Database } from '@/components/types_db';
 
 import 'styles/main.css';
 import 'styles/chrome-bug.css';
