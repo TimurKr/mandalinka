@@ -4,7 +4,7 @@ import {
 } from '@supabase/auth-helpers-nextjs';
 
 import { ProductWithPrice } from 'types';
-import type { Database } from 'types_db';
+import type { Database } from '@/lib/database.types';
 
 export const supabase = createBrowserSupabaseClient<Database>();
 
@@ -20,7 +20,7 @@ export const getActiveProductsWithPrices = async (): Promise<
     .order('unit_amount', { foreignTable: 'prices' });
 
   if (error) {
-    console.log(error.message);
+    console.error(error.message);
   }
   // TODO: improve the typing here.
   return (data as any) || [];

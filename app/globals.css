@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body.loading * {
+    transition: none !important;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply block w-full rounded-full px-3 py-1 text-center shadow-md transition-all duration-300 hover:shadow-xl focus:shadow-xl disabled:opacity-50 disabled:shadow-none;
+  }
+  .btn-primary {
+    @apply border border-primary text-primary transition-all duration-300 checked:bg-primary checked:text-black hover:bg-primary hover:text-black disabled:hover:bg-inherit disabled:hover:text-primary;
+  }
+  .btn-primary-dark {
+    @apply border border-transparent bg-primary text-black transition-all duration-300 checked:border checked:border-primary checked:text-primary hover:border hover:border-primary hover:bg-transparent hover:text-primary disabled:hover:border-none disabled:hover:bg-primary disabled:hover:text-black;
+  }
+  .btn-secondary {
+    @apply border border-secondary text-secondary transition-all duration-300 checked:bg-secondary checked:text-black hover:bg-secondary hover:text-black disabled:hover:bg-inherit disabled:hover:text-secondary;
+  }
+  .btn-secondary-dark {
+    @apply border border-transparent bg-secondary text-black transition-all duration-300 checked:border checked:border-secondary checked:text-secondary hover:border hover:border-secondary hover:bg-transparent hover:text-secondary disabled:hover:border-none disabled:hover:bg-secondary disabled:hover:text-black;
+  }
+  .btn-black {
+    @apply border border-black text-black transition-all duration-300 checked:bg-black checked:text-white hover:bg-black hover:text-white disabled:hover:bg-inherit disabled:hover:text-black;
+  }
+  .btn-black-dark {
+    @apply border border-transparent bg-black text-white transition-all duration-300 checked:border checked:border-black checked:text-black hover:border hover:border-black hover:bg-transparent hover:text-black disabled:hover:border-none disabled:hover:bg-black disabled:hover:text-white;
+  }
+  .btn-warning {
+    @apply border border-warning text-warning-600 transition-all duration-300 checked:bg-warning checked:text-black hover:bg-warning hover:text-black disabled:hover:bg-inherit disabled:hover:text-warning;
+  }
+  .btn-warning-dark {
+    @apply border border-transparent bg-warning text-black transition-all duration-300 checked:border checked:border-warning checked:text-warning-600 hover:border hover:border-warning hover:bg-transparent hover:text-warning-600 disabled:hover:border-none disabled:hover:bg-warning disabled:hover:text-black;
+  }
+  .btn-success {
+    @apply border border-success text-success transition-all duration-300 checked:bg-success checked:text-white hover:bg-success hover:text-white disabled:hover:bg-inherit disabled:hover:text-success;
+  }
+  .btn-success-dark {
+    @apply border border-transparent bg-success text-white transition-all duration-300 checked:border checked:border-success checked:text-success hover:border hover:border-success hover:bg-transparent hover:text-success disabled:hover:border-none disabled:hover:bg-success disabled:hover:text-white;
+  }
+  .btn-danger {
+    @apply border border-danger text-danger transition-all duration-300 checked:bg-danger checked:text-white hover:bg-danger hover:text-white disabled:hover:bg-inherit disabled:hover:text-danger;
+  }
+  .btn-danger-dark {
+    @apply border border-transparent bg-danger text-white transition-all duration-300 checked:border checked:border-danger checked:text-danger hover:border hover:border-danger hover:bg-transparent hover:text-danger disabled:hover:border-none disabled:hover:bg-danger disabled:hover:text-white;
+  }
+}
+
+@layer utilities {
+  /* Make input rings the primary color */
+  [type='text']:focus,
+  [type='email']:focus,
+  [type='url']:focus,
+  [type='password']:focus,
+  [type='number']:focus,
+  [type='date']:focus,
+  [type='datetime-local']:focus,
+  [type='month']:focus,
+  [type='search']:focus,
+  [type='tel']:focus,
+  [type='time']:focus,
+  [type='week']:focus,
+  [multiple]:focus,
+  textarea:focus,
+  select:focus {
+    @apply ring-2 ring-primary-300 !important;
+  }
+}
