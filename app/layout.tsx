@@ -7,7 +7,7 @@ import 'flowbite/dist/flowbite.min.css';
 
 import { Lora } from 'next/font/google';
 
-import SupabaseProvider from './components/supabase-provider';
+import SupabaseProvider from '../lib/supabase-provider';
 
 const font = Lora({
   subsets: ['latin-ext'],

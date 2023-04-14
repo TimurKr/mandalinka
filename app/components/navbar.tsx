@@ -23,7 +23,7 @@ export default async function Navbar() {
 
   if (!user) {
     pages = [
-      { label: 'Prihlásiť sa', url: '/account/login', dark: false },
+      { label: 'Prihlásiť sa', url: '/login', dark: false },
       { label: 'Zaregistrovať', url: '/register', dark: true },
     ];
   } else {
@@ -59,7 +59,7 @@ export default async function Navbar() {
             href={page.url}
             variant="black"
             dark={page.dark}
-            className="text-xl"
+            className=""
           >
             {page.label}
           </Button>
