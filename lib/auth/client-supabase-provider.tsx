@@ -36,12 +36,17 @@ export default function SupabaseProvider({
   return <Context.Provider value={{ supabase }}>{children}</Context.Provider>;
 }
 
-export const useSupabase = () => {
+export function useClientSupabase() {
   let context = useContext(Context);
 
   if (context === undefined) {
-    throw new Error('useSupabase must be used inside SupabaseProvider');
+    throw new Error('useClientSupabase must be used inside SupabaseProvider');
   }
 
   return context;
-};
+}
+
+export async function useClientUser() {
+  const { data, error } = await useClientSupabase().supabase.auth.getUser();
+  return data?.user;
+}

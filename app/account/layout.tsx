@@ -1,11 +1,12 @@
-import { createServerComponentSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { headers, cookies } from 'next/headers';
-
-import type { Database } from '@/lib/database.types';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import Button from '@/lib/ui/button';
 import Logout from './logout';
+import {
+  useServerSupabase,
+  useServerUser,
+} from '@/lib/auth/server-supabase-provider copy';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 
 export const revalidate = 0;
 
@@ -14,14 +15,11 @@ export default async function Layout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = createServerComponentSupabaseClient<Database>({
-    headers,
-    cookies,
-  });
+  const supabase = useServerSupabase();
+  const supabase_user = await useServerUser();
 
-  const { data: userObject, error } = await supabase.auth.getUser();
-
-  if (!userObject.user) {
+  //
+  if (!supabase_user) {
     redirect('/login');
     return null;
   }
@@ -29,11 +27,12 @@ export default async function Layout({
   const { data: user } = await supabase
     .from('users')
     .select('*')
-    .eq('id', userObject.user.id)
+    .eq('id', supabase_user.id)
     .single();
 
   const pages = [
     { label: 'Všeobecné informácie', url: '/account/general' },
+    { label: 'Notifikácie', url: '/account/notifications' },
     { label: 'Adresy doručenia', url: '/account/address' },
     { label: 'Preferencie', url: '/account/preferences' },
     { label: 'História objednávok', url: '/account/history' },
@@ -43,6 +42,9 @@ export default async function Layout({
     <div className="grid min-h-screen place-content-center bg-primary-100 p-32">
       <div className="flex gap-3">
         <div className="rounded-xl bg-white p-4 shadow-md">
+          <Link href="/" className="inline-block rounded-md hover:bg-slate-300">
+            <ArrowLeftIcon className="m-1 h-5 w-5" />
+          </Link>
           <h4 className="p-2 text-xl font-semibold text-black">
             {user?.full_name || 'Mr. NoName'}
           </h4>

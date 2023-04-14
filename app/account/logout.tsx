@@ -1,6 +1,6 @@
 'use client';
 
-import { useSupabase } from '@/lib/supabase-provider';
+import { useClientSupabase } from '@/lib/auth/client-supabase-provider';
 import ConfirmationModal from '@/lib/ui/confirmation_modal';
 import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
@@ -12,7 +12,7 @@ export default function Logout({
 }): JSX.Element {
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
-  const { supabase } = useSupabase();
+  const { supabase } = useClientSupabase();
 
   async function handleLogout() {
     const { error } = await supabase.auth.signOut();

@@ -1,16 +1,12 @@
 'use client';
 import { Auth } from '@supabase/auth-ui-react';
 
-import { useSupabase } from '@/lib/supabase-provider';
+import { useClientSupabase } from '@/lib/auth/client-supabase-provider';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 export default async function Login() {
-  const { supabase } = useSupabase();
-
-  if (!(await supabase.auth.getUser()).data.user) {
-    redirect('/account');
-  }
+  const { supabase } = useClientSupabase();
 
   return (
     <div className="rounded-xl bg-white px-8 py-6 shadow-2xl">
