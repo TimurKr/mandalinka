@@ -6,7 +6,7 @@ import { ThemeSupa } from '@supabase/auth-ui-shared';
 
 import LoadingDots from '@/components_deprecated/ui/LoadingDots';
 import Logo from '@/components_deprecated/icons/Logo';
-import { getURL } from '@/utils/helpers';
+import { getURL } from '@/utils_deprecated/helpers';
 
 const SignIn = () => {
   const router = useRouter();

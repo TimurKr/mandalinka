@@ -1,3 +1,3 @@
-import Loading from '@/lib/loading_element';
+import Loading from '@/lib/ui/loading_element';
 
 export default Loading;
