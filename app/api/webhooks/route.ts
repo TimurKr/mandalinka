@@ -27,16 +27,22 @@ const relevantEvents = new Set([
 ]);
 
 export async function POST(req: NextRequest) {
+  console.log('🔔 Webhook received');
+
   //// READ the request
   const sig = req.headers.get('stripe-signature');
   const webhookSecret =
     process.env.STRIPE_WEBHOOK_SECRET_LIVE ?? process.env.STRIPE_WEBHOOK_SECRET;
   let event: Stripe.Event;
 
+  console.log('🔔 Webhook signature:', sig);
+  console.log('🔔 Webhook secret:', webhookSecret);
+
   try {
     if (!sig || !webhookSecret) return;
     // Get the payload from the request into string or buffer
     const payload = await req.text();
+    console.log('🔔 Webhook payload:', payload);
     event = stripe.webhooks.constructEvent(payload, sig, webhookSecret);
   } catch (err: any) {
     console.error(`❌ Error message: ${err.message}`);
