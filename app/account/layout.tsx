@@ -5,7 +5,7 @@ import Logout from './logout';
 import {
   useServerSupabase,
   useServerUser,
-} from '@/lib/auth/server-supabase-provider copy';
+} from '@/lib/auth/server-supabase-provider';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 
 export const revalidate = 0;

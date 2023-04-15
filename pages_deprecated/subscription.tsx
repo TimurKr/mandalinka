@@ -1,7 +1,7 @@
 import { GetStaticPropsResult } from 'next';
 
 import Pricing from '@/components_deprecated/ui/Pricing';
-import { getActiveProductsWithPrices } from '@/utils/supabase-client';
+import { getActiveProductsWithPrices } from '@/utils_deprecated/supabase-client';
 import { Product } from 'types';
 
 interface Props {

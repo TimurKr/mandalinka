@@ -8,8 +8,8 @@ import {
 
 import LoadingDots from '@/components_deprecated/ui/LoadingDots';
 import Button from '@/components_deprecated/ui/Button';
-import { useUser } from '@/utils/useUser';
-import { postData } from '@/utils/helpers';
+import { useUser } from '@/utils_deprecated/useUser';
+import { postData } from '@/utils_deprecated/helpers';
 
 interface Props {
   title: string;

@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 import Favicon from '@/public/favicon.ico';
 import { BellAlertIcon, UserCircleIcon } from '@heroicons/react/24/outline';
-import { useServerUser } from '@/lib/auth/server-supabase-provider copy';
+import { useServerUser } from '@/lib/auth/server-supabase-provider';
 
 export const revalidate = 0;
 
@@ -14,7 +14,7 @@ export default async function Navbar() {
 
   if (!user) {
     pages = [
-      { label: 'Prihlásiť sa', url: '/login', dark: false },
+      { label: 'Prihlásiť sa', url: '/auth?view=sign_in', dark: false },
       { label: 'Zaregistrovať', url: '/register', dark: true },
     ];
   } else {

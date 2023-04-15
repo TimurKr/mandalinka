@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 
 import Logo from '@/components_deprecated/icons/Logo';
-import { useUser } from '@/utils/useUser';
+import { useUser } from '@/utils_deprecated/useUser';
 
 import s from './Navbar.module.css';
 

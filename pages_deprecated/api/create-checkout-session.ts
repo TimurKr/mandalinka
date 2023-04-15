@@ -1,9 +1,9 @@
 import { NextApiHandler } from 'next';
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 
-import { stripe } from '@/utils/stripe';
-import { createOrRetrieveCustomer } from '@/utils/supabase-admin';
-import { getURL } from '@/utils/helpers';
+import { stripe } from '@/utils_deprecated/stripe';
+import { createOrRetrieveCustomer } from '@/utils_deprecated/supabase-admin';
+import { getURL } from '@/utils_deprecated/helpers';
 
 const CreateCheckoutSession: NextApiHandler = async (req, res) => {
   if (req.method === 'POST') {
@@ -12,12 +12,12 @@ const CreateCheckoutSession: NextApiHandler = async (req, res) => {
     try {
       const supabase = createServerSupabaseClient({ req, res });
       const {
-        data: { user }
+        data: { user },
       } = await supabase.auth.getUser();
 
       const customer = await createOrRetrieveCustomer({
         uuid: user?.id || '',
-        email: user?.email || ''
+        email: user?.email || '',
       });
 
       const session = await stripe.checkout.sessions.create({
@@ -27,17 +27,17 @@ const CreateCheckoutSession: NextApiHandler = async (req, res) => {
         line_items: [
           {
             price: price.id,
-            quantity
-          }
+            quantity,
+          },
         ],
         mode: 'subscription',
         allow_promotion_codes: true,
         subscription_data: {
           trial_from_plan: true,
-          metadata
+          metadata,
         },
         success_url: `${getURL()}/account`,
-        cancel_url: `${getURL()}/`
+        cancel_url: `${getURL()}/`,
       });
 
       return res.status(200).json({ sessionId: session.id });

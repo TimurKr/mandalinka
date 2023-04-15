@@ -5,7 +5,7 @@ import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
 
 import Layout from '@/components_deprecated/ui/Layout';
-import { MyUserContextProvider } from '@/utils/useUser';
+import { MyUserContextProvider } from '@/utils_deprecated/useUser';
 import type { Database } from '@/components_deprecated/types_db';
 
 import 'styles/main.css';

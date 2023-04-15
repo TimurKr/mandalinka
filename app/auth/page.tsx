@@ -1,12 +1,31 @@
 'use client';
 import { Auth } from '@supabase/auth-ui-react';
+import { ViewType } from '@supabase/auth-ui-shared';
 
 import { useClientSupabase } from '@/lib/auth/client-supabase-provider';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
-import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import { getURL } from '@/lib/helpers';
 
-export default async function Login() {
+export default async function Authentificate() {
   const { supabase } = useClientSupabase();
+
+  const searchParams = useSearchParams();
+
+  const validViews = [
+    'sign_in',
+    'sign_up',
+    'forgotten_password',
+    'magic_link',
+    'update_password',
+  ];
+  let view = searchParams.get('view') || 'sign_up';
+
+  if (!validViews.includes(view)) {
+    view = 'sign_up';
+  }
+
+  const redirect_url = searchParams.get('redirect_url');
 
   return (
     <div className="rounded-xl bg-white px-8 py-6 shadow-2xl">
@@ -17,7 +36,8 @@ export default async function Login() {
         supabaseClient={supabase}
         socialLayout="horizontal"
         magicLink={true}
-        redirectTo="/account/general"
+        redirectTo={redirect_url || undefined}
+        view={view as ViewType}
         appearance={{
           theme: ThemeSupa,
           variables: {
