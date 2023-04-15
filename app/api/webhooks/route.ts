@@ -27,8 +27,6 @@ const relevantEvents = new Set([
 ]);
 
 export async function POST(req: NextRequest) {
-  console.log('webhook received');
-
   //// READ the request
   const sig = req.headers.get('stripe-signature');
   const webhookSecret =
@@ -46,8 +44,6 @@ export async function POST(req: NextRequest) {
       status: 400,
     });
   }
-
-  console.log('webhook read');
 
   //// PROCESS the request
   if (relevantEvents.has(event.type)) {
@@ -94,8 +90,6 @@ export async function POST(req: NextRequest) {
   } else {
     console.log(`🤷‍♀️ Unhandled event type: ${event.type}`);
   }
-
-  console.log('webhook processed');
 
   return new Response('Webhook received', {
     status: 200,
