@@ -24,7 +24,8 @@ export default function SupabaseProvider({
   useEffect(() => {
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(() => {
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log(event, session);
       router.refresh();
     });
 
@@ -33,20 +34,24 @@ export default function SupabaseProvider({
     };
   }, [router, supabase]);
 
-  return <Context.Provider value={{ supabase }}>{children}</Context.Provider>;
+  return (
+    <Context.Provider value={{ supabase }}>
+      <>{children}</>
+    </Context.Provider>
+  );
 }
 
-export function useClientSupabase() {
-  let context = useContext(Context);
+export const useClientSupabase = () => {
+  const context = useContext(Context);
 
   if (context === undefined) {
-    throw new Error('useClientSupabase must be used inside SupabaseProvider');
+    throw new Error('useSupabase must be used inside SupabaseProvider');
   }
 
   return context;
-}
+};
 
-export async function useClientUser() {
-  const { data, error } = await useClientSupabase().supabase.auth.getUser();
+export async function useClientUser(supabase: SupabaseContext['supabase']) {
+  const { data, error } = await supabase.auth.getUser();
   return data?.user;
 }

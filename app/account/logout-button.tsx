@@ -5,7 +5,7 @@ import ConfirmationModal from '@/lib/ui/confirmation_modal';
 import { ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 
-export default function Logout({
+export default function LogoutButton({
   className,
 }: {
   className?: string;
@@ -19,6 +19,7 @@ export default function Logout({
     if (error) {
       console.error('Error signing out: ', error);
     }
+    setShowConfirmationModal(false);
   }
 
   return (
