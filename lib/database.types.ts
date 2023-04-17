@@ -9,6 +9,53 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      address: {
+        Row: {
+          city: string
+          coordinates: Json
+          country: string
+          created_at: string
+          district: string | null
+          id: number
+          is_primary: boolean
+          label: string
+          note: string | null
+          number: string
+          postal: string | null
+          street: string
+          user: string
+        }
+        Insert: {
+          city: string
+          coordinates: Json
+          country?: string
+          created_at?: string
+          district?: string | null
+          id?: number
+          is_primary?: boolean
+          label: string
+          note?: string | null
+          number: string
+          postal?: string | null
+          street: string
+          user: string
+        }
+        Update: {
+          city?: string
+          coordinates?: Json
+          country?: string
+          created_at?: string
+          district?: string | null
+          id?: number
+          is_primary?: boolean
+          label?: string
+          note?: string | null
+          number?: string
+          postal?: string | null
+          street?: string
+          user?: string
+        }
+      }
       customers: {
         Row: {
           id: string
@@ -149,6 +196,7 @@ export interface Database {
           billing_address: Json | null
           full_name: string | null
           id: string
+          is_set: boolean
           payment_method: Json | null
         }
         Insert: {
@@ -156,6 +204,7 @@ export interface Database {
           billing_address?: Json | null
           full_name?: string | null
           id: string
+          is_set?: boolean
           payment_method?: Json | null
         }
         Update: {
@@ -163,6 +212,7 @@ export interface Database {
           billing_address?: Json | null
           full_name?: string | null
           id?: string
+          is_set?: boolean
           payment_method?: Json | null
         }
       }

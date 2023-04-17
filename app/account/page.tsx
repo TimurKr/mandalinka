@@ -1,6 +1,5 @@
 import { redirect } from 'next/navigation';
 
-export default function Page() {
-  redirect('account/general');
-  return null;
+export default async function Page() {
+  return redirect('/account/general');
 }
