@@ -56,6 +56,23 @@ export interface Database {
           user?: string
         }
       }
+      alergen: {
+        Row: {
+          icon: string
+          id: number
+          label: string
+        }
+        Insert: {
+          icon: string
+          id?: number
+          label: string
+        }
+        Update: {
+          icon?: string
+          id?: number
+          label?: string
+        }
+      }
       customers: {
         Row: {
           id: string
@@ -68,6 +85,86 @@ export interface Database {
         Update: {
           id?: string
           stripe_customer_id?: string | null
+        }
+      }
+      diet: {
+        Row: {
+          icon: string
+          id: number
+          label: string
+        }
+        Insert: {
+          icon: string
+          id?: number
+          label: string
+        }
+        Update: {
+          icon?: string
+          id?: number
+          label?: string
+        }
+      }
+      food_attributes: {
+        Row: {
+          icon: string
+          id: number
+          label: string
+        }
+        Insert: {
+          icon: string
+          id?: number
+          label: string
+        }
+        Update: {
+          icon?: string
+          id?: number
+          label?: string
+        }
+      }
+      kitchen_accessory: {
+        Row: {
+          icon: string
+          id: number
+          label: string
+        }
+        Insert: {
+          icon: string
+          id?: number
+          label: string
+        }
+        Update: {
+          icon?: string
+          id?: number
+          label?: string
+        }
+      }
+      notifications: {
+        Row: {
+          created_at: string | null
+          href: string | null
+          id: number
+          message: string
+          read: boolean
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          href?: string | null
+          id?: number
+          message: string
+          read?: boolean
+          title: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          href?: string | null
+          id?: number
+          message?: string
+          read?: boolean
+          title?: string
+          user_id?: string
         }
       }
       prices: {
@@ -192,28 +289,43 @@ export interface Database {
       }
       users: {
         Row: {
+          account_setup_completed: boolean
           avatar_url: string | null
           billing_address: Json | null
           full_name: string | null
           id: string
-          is_set: boolean
+          is_staff: boolean
+          newsletter: boolean
+          number_of_portions: number | null
           payment_method: Json | null
+          pick_up: boolean | null
+          terms: boolean
         }
         Insert: {
+          account_setup_completed?: boolean
           avatar_url?: string | null
           billing_address?: Json | null
           full_name?: string | null
           id: string
-          is_set?: boolean
+          is_staff?: boolean
+          newsletter?: boolean
+          number_of_portions?: number | null
           payment_method?: Json | null
+          pick_up?: boolean | null
+          terms?: boolean
         }
         Update: {
+          account_setup_completed?: boolean
           avatar_url?: string | null
           billing_address?: Json | null
           full_name?: string | null
           id?: string
-          is_set?: boolean
+          is_staff?: boolean
+          newsletter?: boolean
+          number_of_portions?: number | null
           payment_method?: Json | null
+          pick_up?: boolean | null
+          terms?: boolean
         }
       }
     }

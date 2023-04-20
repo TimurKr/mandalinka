@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
 
 export default async function Page() {
-  return redirect('/account/general');
+  return redirect('/dashboard/account_settings/general');
 }

@@ -28,7 +28,7 @@ export default function Authentificate({
   view?: string;
 }) {
   // Hooks
-  const { supabase } = useClientSupabase();
+  const supabase = useClientSupabase();
 
   return (
     <>

@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Favicon from '@/public/favicon.ico';
 import { BellAlertIcon, UserCircleIcon } from '@heroicons/react/24/outline';
 import { useServerUser } from '@/lib/auth/server-supabase-provider';
-import LogoutButton from '../account/logout-button';
+import LogoutButton from '../dashboard/components/logout-button';
 
 export const revalidate = 0;
 
@@ -20,7 +20,7 @@ export default async function Navbar() {
     ];
   } else {
     pages = [
-      { label: 'Objednávky', url: '/orders', dark: false },
+      { label: 'Dashboard', url: '/dashboard', dark: false },
       {
         label: <BellAlertIcon className="h-8 w-8" />,
         url: '/account/notifications',
@@ -34,7 +34,7 @@ export default async function Navbar() {
     ];
   }
 
-  if (user?.role === 'staff') {
+  if (user?.is_staff) {
     pages.splice(0, 0, { label: 'Dashboard', url: '/dashboard', dark: false });
   }
 

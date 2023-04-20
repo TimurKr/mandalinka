@@ -48,7 +48,7 @@ export const useClientSupabase = () => {
     throw new Error('useSupabase must be used inside SupabaseProvider');
   }
 
-  return context;
+  return context.supabase;
 };
 
 export async function useClientUser(supabase: SupabaseContext['supabase']) {

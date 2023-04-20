@@ -7,12 +7,14 @@ import { useState } from 'react';
 
 export default function LogoutButton({
   className,
+  children,
 }: {
   className?: string;
+  children?: React.ReactNode;
 }): JSX.Element {
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
-  const { supabase } = useClientSupabase();
+  const supabase = useClientSupabase();
 
   async function handleLogout() {
     const { error } = await supabase.auth.signOut();
@@ -40,7 +42,7 @@ export default function LogoutButton({
         onClick={() => setShowConfirmationModal(true)}
         className={`${className} cursor-pointer`}
       >
-        Logout
+        {children || 'Odhlásiť sa'}
       </a>
     </>
   );

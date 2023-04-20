@@ -1,12 +1,8 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import Button from '@/lib/ui/button';
-import {
-  useServerSupabase,
-  useServerUser,
-} from '@/lib/auth/server-supabase-provider';
+import { useServerUser } from '@/lib/auth/server-supabase-provider';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
-import LogoutButton from '../logout-button';
 
 export const revalidate = 0;
 
@@ -15,23 +11,12 @@ export default async function Layout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = useServerSupabase();
-  const supabase_user = await useServerUser();
+  const user = await useServerUser();
 
-  if (!supabase_user) redirect('/auth?redirect_url=/account&view=sign_in');
+  if (!user) redirect('/auth?redirect_url=/account');
 
-  const { data: user } = await supabase
-    .from('users')
-    .select('is_set, full_name')
-    .eq('id', supabase_user.id)
-    .single();
-
-  if (!user) {
-    return redirect('/auth?redirect_url=/account&view=sign_in');
-  }
-
-  if (!user.is_set) {
-    return redirect('/account/setup');
+  if (!user.account_setup_completed) {
+    return redirect('/account_setup');
   }
 
   const pages = [
@@ -62,9 +47,6 @@ export default async function Layout({
               </Link>
             </p>
           ))}
-          <p>
-            <LogoutButton className=" rounded-lg px-2 py-1 font-semibold text-red-600 hover:bg-red-300" />
-          </p>
         </div>
       </div>
       <div className="grow rounded-xl bg-white p-4 shadow-md">{children}</div>
