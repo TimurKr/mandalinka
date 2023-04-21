@@ -7,7 +7,7 @@ import 'flowbite/dist/flowbite.min.css';
 
 import { Lora } from 'next/font/google';
 
-// import 'flowbite';
+import 'flowbite';
 
 import SupabaseProvider from '../lib/auth/client-supabase-provider';
 

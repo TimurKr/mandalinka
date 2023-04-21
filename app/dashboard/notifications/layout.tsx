@@ -5,7 +5,7 @@ export default async function Layout({
 }) {
   return (
     <div className="flex justify-center pt-16">
-      <div className="rounded-xl bg-white p-6 shadow-2xl">{children}</div>
+      <div className="m-6 rounded-xl bg-white p-6 shadow-2xl">{children}</div>
     </div>
   );
 }
