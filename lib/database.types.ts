@@ -56,19 +56,22 @@ export interface Database {
           user?: string
         }
       }
-      alergen: {
+      alergens: {
         Row: {
-          icon: string
+          description: string | null
+          icon: string | null
           id: number
           label: string
         }
         Insert: {
-          icon: string
+          description?: string | null
+          icon?: string | null
           id?: number
           label: string
         }
         Update: {
-          icon?: string
+          description?: string | null
+          icon?: string | null
           id?: number
           label?: string
         }
@@ -87,55 +90,124 @@ export interface Database {
           stripe_customer_id?: string | null
         }
       }
-      diet: {
+      diets: {
         Row: {
-          icon: string
+          description: string | null
+          icon: string | null
           id: number
           label: string
         }
         Insert: {
-          icon: string
+          description?: string | null
+          icon?: string | null
           id?: number
           label: string
         }
         Update: {
-          icon?: string
+          description?: string | null
+          icon?: string | null
           id?: number
           label?: string
         }
       }
       food_attributes: {
         Row: {
-          icon: string
+          icon: string | null
           id: number
           label: string
         }
         Insert: {
-          icon: string
+          icon?: string | null
           id?: number
           label: string
         }
         Update: {
-          icon?: string
+          icon?: string | null
           id?: number
           label?: string
         }
       }
+      ingredient_versions: {
+        Row: {
+          created_at: string | null
+          id: number
+          ingredient: number
+          status: Database["public"]["Enums"]["ingredient_status"]
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          ingredient: number
+          status?: Database["public"]["Enums"]["ingredient_status"]
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          ingredient?: number
+          status?: Database["public"]["Enums"]["ingredient_status"]
+        }
+      }
+      ingredients: {
+        Row: {
+          created_at: string | null
+          extra_info: Json | null
+          id: number
+          img: string | null
+          name: string
+          search_tags: string[] | null
+          unit: number
+        }
+        Insert: {
+          created_at?: string | null
+          extra_info?: Json | null
+          id?: number
+          img?: string | null
+          name: string
+          search_tags?: string[] | null
+          unit: number
+        }
+        Update: {
+          created_at?: string | null
+          extra_info?: Json | null
+          id?: number
+          img?: string | null
+          name?: string
+          search_tags?: string[] | null
+          unit?: number
+        }
+      }
       kitchen_accessory: {
         Row: {
-          icon: string
+          icon: string | null
           id: number
           label: string
         }
         Insert: {
-          icon: string
+          icon?: string | null
           id?: number
           label: string
         }
         Update: {
-          icon?: string
+          icon?: string | null
           id?: number
           label?: string
+        }
+      }
+      M2M_ingredients_alergens: {
+        Row: {
+          alergen: number
+          id: number
+          ingredient: number
+        }
+        Insert: {
+          alergen: number
+          id?: number
+          ingredient: number
+        }
+        Update: {
+          alergen?: number
+          id?: number
+          ingredient?: number
         }
       }
       notifications: {
@@ -145,6 +217,7 @@ export interface Database {
           id: number
           message: string
           read: boolean
+          tags: string[] | null
           title: string
           user_id: string
         }
@@ -154,6 +227,7 @@ export interface Database {
           id?: number
           message: string
           read?: boolean
+          tags?: string[] | null
           title: string
           user_id: string
         }
@@ -163,6 +237,7 @@ export interface Database {
           id?: number
           message?: string
           read?: boolean
+          tags?: string[] | null
           title?: string
           user_id?: string
         }
@@ -287,6 +362,35 @@ export interface Database {
           user_id?: string
         }
       }
+      units: {
+        Row: {
+          base_unit: number | null
+          conversion_rate: number
+          id: number
+          measurement_system: Database["public"]["Enums"]["measurement_system"]
+          name: string
+          property: Database["public"]["Enums"]["physical_property"]
+          sign: string
+        }
+        Insert: {
+          base_unit?: number | null
+          conversion_rate: number
+          id?: number
+          measurement_system: Database["public"]["Enums"]["measurement_system"]
+          name: string
+          property: Database["public"]["Enums"]["physical_property"]
+          sign: string
+        }
+        Update: {
+          base_unit?: number | null
+          conversion_rate?: number
+          id?: number
+          measurement_system?: Database["public"]["Enums"]["measurement_system"]
+          name?: string
+          property?: Database["public"]["Enums"]["physical_property"]
+          sign?: string
+        }
+      }
       users: {
         Row: {
           account_setup_completed: boolean
@@ -336,6 +440,9 @@ export interface Database {
       [_ in never]: never
     }
     Enums: {
+      ingredient_status: "active" | "preparation" | "archived"
+      measurement_system: "metric" | "imperial"
+      physical_property: "mass" | "volume" | "length" | "count"
       pricing_plan_interval: "day" | "week" | "month" | "year"
       pricing_type: "one_time" | "recurring"
       subscription_status:
