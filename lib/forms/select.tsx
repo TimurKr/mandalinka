@@ -3,9 +3,11 @@ import { useEffect } from 'react';
 import { isPropertySignature } from 'typescript';
 import ErrorMessage from './error_message';
 
+export type Option = { value: string | number; label: string };
+
 type SelectInputProps = FieldHookConfig<string | number> & {
   label: string;
-  options: { value: string | number; label: string }[];
+  options: Option[];
 };
 
 const SelectInput: React.FC<SelectInputProps> = (props) => {

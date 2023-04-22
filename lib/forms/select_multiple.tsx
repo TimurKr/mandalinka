@@ -2,21 +2,23 @@ import { useField, Field } from 'formik';
 import { BorderedElement } from '@/lib/ui/bordered_element';
 import ErrorMessage from './error_message';
 
-const MultiSelectInput = ({
-  label,
+export type Option = { value: string | number; label: string };
+
+const SelectMultipleField = ({
   name,
   options,
+  label,
 }: {
-  label: string;
   name: string;
-  options: { value: string | number; label: string }[];
+  options: Option[];
+  label?: string;
 }) => {
   const [field, meta, helper] = useField(name);
 
   return (
     <BorderedElement
       title={label}
-      className="!rounded-lg !border-gray-300 pt-4"
+      className="!h-auto !rounded-lg !border-gray-300 bg-gray-50 pt-4"
     >
       <div
         role="group"
@@ -66,4 +68,4 @@ const MultiSelectInput = ({
   );
 };
 
-export default MultiSelectInput;
+export default SelectMultipleField;

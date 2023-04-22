@@ -18,7 +18,7 @@ export default async function Search() {
     <div className="flex h-full w-[15rem] flex-col">
       <ClientSearch ingredients={data} />
       <div className="z-10 w-full flex-none p-3 backdrop-blur">
-        <Button variant="primary" dark href="/management/ingredients/new">
+        <Button variant="primary" dark href="/dashboard/ingredients/new">
           Pridať novú ingredienciu
         </Button>
       </div>
