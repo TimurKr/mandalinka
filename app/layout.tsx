@@ -7,7 +7,9 @@ import 'flowbite/dist/flowbite.min.css';
 
 import { Lora } from 'next/font/google';
 
-// import 'flowbite';
+import 'flowbite';
+
+import { Analytics } from '@vercel/analytics/react';
 
 import SupabaseProvider from '../lib/auth/client-supabase-provider';
 
@@ -36,6 +38,8 @@ export default function RootLayout({
     <html lang="sk" className={font.className}>
       <body>
         <SupabaseProvider>{children}</SupabaseProvider>
+
+        <Analytics />
       </body>
     </html>
   );
