@@ -1,6 +1,6 @@
 'use client';
 
-import { Option } from '@/lib/forms/select';
+import { Option } from '@/lib/forms/select_multiple';
 import Alert from '@/lib/ui/alert';
 import { useState, useCallback } from 'react';
 

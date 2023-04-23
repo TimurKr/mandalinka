@@ -5,6 +5,10 @@ const nextConfig = {
   experimental: {
     appDir: true,
   },
+  images: {
+    loader: 'custom',
+    loaderFile: './lib/storage/supabase-image-loader.js',
+  },
 };
 
 module.exports = nextConfig;

@@ -11,10 +11,6 @@ import { useRouter } from 'next/navigation';
 import Button from '@/lib/ui/button';
 
 import Alert from '@/lib/ui/alert';
-import Loading from '@/lib/ui/loading_element';
-import Error from '@/lib/ui/error_element';
-import TextInput from '@/lib/forms/text';
-import { Form, Formik } from 'formik';
 
 type Ingredient = {
   id: number;
@@ -148,7 +144,7 @@ export default function ClientSearch({
           />
         </form>
       </div>
-      <div className="z-0 w-full flex-grow overflow-y-scroll">
+      <div className="z-0 w-full flex-grow overflow-y-auto">
         {matchingIngredients.length === 0 && (
           <Alert variant="warning">
             Nenašli sa žiadne výsledky pre hľadanie <strong>{search}</strong>
@@ -157,7 +153,7 @@ export default function ClientSearch({
 
         <ul className="h-full">
           {matchingIngredients.map((ingredient) => (
-            <li key={ingredient.id} className="block p-3">
+            <li key={ingredient.id} className="block p-3 py-2">
               <Button
                 variant="black"
                 // variant={
