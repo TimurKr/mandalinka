@@ -1,21 +1,15 @@
-import { ExclamationCircleIcon } from "@heroicons/react/20/solid";
-import { FieldMetaProps } from "formik";
+import { ExclamationCircleIcon } from '@heroicons/react/20/solid';
+import { ErrorMessage as EM } from 'formik';
 
-type Props = {
-  meta: FieldMetaProps<any>;
-};
-
-const ErrorMessage: React.FC<Props> = ({ meta }) => {
+export default function ErrorMessage({ name }: { name: string }) {
   return (
-    <>
-      {meta.touched && meta.error ? (
-        <div className="mt-1 flex w-full items-center text-sm text-red-500">
-          <ExclamationCircleIcon className="mr-1 h-4 w-4 shrink-0" />
-          {meta.error}
+    <EM name={name}>
+      {(msg) => (
+        <div className="flex items-center text-red-600">
+          <ExclamationCircleIcon className="mr-1 h-4 w-4" />
+          {msg}
         </div>
-      ) : null}
-    </>
+      )}
+    </EM>
   );
-};
-
-export default ErrorMessage;
+}

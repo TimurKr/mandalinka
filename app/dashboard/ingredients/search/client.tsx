@@ -114,7 +114,6 @@ export default function ClientSearch({
 
   useEffect(() => {
     handleSearch(search);
-    console.log('search: ', search);
   }, [handleSearch, search]);
 
   function handleSubmit(event: React.ChangeEvent<HTMLFormElement>): void {

@@ -49,8 +49,6 @@ export default function Notification({
     if (error_message) setError(error_message.message);
     else setError(null);
 
-    console.log('New notfication:', new_notif);
-
     if (new_notif) setNotif(new_notif);
 
     setLoading(false);
