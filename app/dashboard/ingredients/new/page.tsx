@@ -5,7 +5,6 @@ import AddIngredientForm from './ingredient_form';
 import { useServerSupabase } from '@/lib/auth/server-supabase-provider';
 
 export default async function NewIngredient() {
-
   const supabase = useServerSupabase();
 
   const { data: alergens, error: alergensError } = await supabase
@@ -20,13 +19,14 @@ export default async function NewIngredient() {
     throw new Error('Error fetching alergens or units');
   }
 
-
   return (
     <div className="flex h-full flex-col items-center">
-      <div className='my-auto py-5'>
-
-      <AddIngredientForm
-          alergens={alergens.map((alergen) => ({ value: alergen.id, label: `${alergen.id}: ${alergen.label}` }))}
+      <div className="my-auto py-5">
+        <AddIngredientForm
+          alergens={alergens.map((alergen) => ({
+            value: alergen.id,
+            label: `${alergen.id}: ${alergen.label}`,
+          }))}
           units={units.map((unit) => ({ value: unit.id, label: unit.name }))}
         />
       </div>

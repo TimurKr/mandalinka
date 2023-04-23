@@ -51,19 +51,21 @@ export default function AddIngredientForm({
 
       const { data: ingredient, error } = await supabase
         .from('ingredients')
-        .insert(
-          {
-            name: name,
-            extra_info: extra_info,
-            search_tags: search_tags?.split(',').map((tag) => tag.trim()).filter((tag) => tag !== ''),
-            unit: parseInt(unit),
-          },
-        ).select('id, name')
+        .insert({
+          name: name,
+          extra_info: extra_info,
+          search_tags: search_tags
+            ?.split(',')
+            .map((tag) => tag.trim())
+            .filter((tag) => tag !== ''),
+          unit: parseInt(unit),
+        })
+        .select('id, name')
         .maybeSingle();
 
       if (error || !ingredient) {
         console.error('Error inserting ingredient: ', error);
-        setError(error?.message || "Nevrátilo sa žiadne ID ani chyba.");
+        setError(error?.message || 'Nevrátilo sa žiadne ID ani chyba.');
         return;
       }
 
@@ -82,9 +84,13 @@ export default function AddIngredientForm({
         return;
       }
 
-
       if (img) {
-        path = `${ingredient.name.trim().toLowerCase().replace(/ /g, '_').normalize("NFD").replace(/\p{Diacritic}/gu, "")}/thumbnail`;
+        path = `${ingredient.name
+          .trim()
+          .toLowerCase()
+          .replace(/ /g, '_')
+          .normalize('NFD')
+          .replace(/\p{Diacritic}/gu, '')}/thumbnail`;
 
         const { data, error } = await supabase.storage
           .from(bucket)
@@ -105,7 +111,7 @@ export default function AddIngredientForm({
 
         if (updateError) {
           console.error('Error updating ingredient: ', updateError);
-          setError(updateError?.message || "Nevrátilo sa žiadne ID ani chyba.");
+          setError(updateError?.message || 'Nevrátilo sa žiadne ID ani chyba.');
           return;
         }
       }
@@ -129,7 +135,9 @@ export default function AddIngredientForm({
       validationSchema={validationSchema}
     >
       <Form className="w-96">
-        <Alert variant="danger" onClose={() => setError(null)}>{error}</Alert>
+        <Alert variant="danger" onClose={() => setError(null)}>
+          {error}
+        </Alert>
         <div className="p-1">
           <Label htmlFor="name">Názov</Label>
           <Field name="name" as={TextInput} />

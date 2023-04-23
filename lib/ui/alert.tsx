@@ -1,4 +1,4 @@
-import { ReactComponentElement } from "react";
+import { ReactComponentElement } from 'react';
 
 import {
   CheckCircleIcon,
@@ -6,7 +6,7 @@ import {
   ExclamationTriangleIcon,
   NoSymbolIcon,
   XMarkIcon,
-} from "@heroicons/react/24/outline";
+} from '@heroicons/react/24/outline';
 
 export default function Alert({
   children,
@@ -17,7 +17,7 @@ export default function Alert({
   icon = true,
 }: {
   children: React.ReactNode;
-  variant: "danger" | "warning" | "success" | "black" | "primary" | "secondary";
+  variant: 'danger' | 'warning' | 'success' | 'black' | 'primary' | 'secondary';
   show?: boolean;
   onClose?: () => void;
   className?: string;
@@ -29,28 +29,28 @@ export default function Alert({
   return (
     <div
       className={`${className} m-2 flex items-center gap-2 rounded-xl border p-2 ${
-        variant === "danger"
-          ? "border-red-600 text-red-600"
-          : variant === "warning"
-          ? "border-yellow-600 text-yellow-600"
-          : variant === "success"
-          ? "border-green-600 text-green-600"
-          : variant === "black"
-          ? "border-gray-600 text-gray-600"
-          : variant === "primary"
-          ? "border-primary-600 text-primary"
-          : variant === "secondary"
-          ? "border-secondary-600 text-secondary"
-          : ""
+        variant === 'danger'
+          ? 'border-red-600 text-red-600'
+          : variant === 'warning'
+          ? 'border-yellow-600 text-yellow-600'
+          : variant === 'success'
+          ? 'border-green-600 text-green-600'
+          : variant === 'black'
+          ? 'border-gray-600 text-gray-600'
+          : variant === 'primary'
+          ? 'border-primary-600 text-primary'
+          : variant === 'secondary'
+          ? 'border-secondary-600 text-secondary'
+          : ''
       }`}
       role="alert"
     >
       {icon == true ? (
-        variant === "danger" ? (
+        variant === 'danger' ? (
           <ExclamationCircleIcon className="h-6 w-6" aria-hidden="true" />
-        ) : variant === "warning" ? (
+        ) : variant === 'warning' ? (
           <ExclamationTriangleIcon className="h-6 w-6" aria-hidden="true" />
-        ) : variant === "success" ? (
+        ) : variant === 'success' ? (
           <CheckCircleIcon className="h-6 w-6" aria-hidden="true" />
         ) : (
           <NoSymbolIcon className="h-6 w-6" aria-hidden="true" />
@@ -58,7 +58,7 @@ export default function Alert({
       ) : icon ? (
         icon
       ) : (
-        ""
+        ''
       )}
       <span className="grow font-medium">{children}</span>
       {onClose && (
