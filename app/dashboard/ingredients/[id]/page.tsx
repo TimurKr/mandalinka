@@ -1,6 +1,6 @@
 import React from 'react';
 
-// import IngredientVersionWidget from "./version_widget/version_widget";
+import IngredientVersionWidget from "./version_widget/version_widget";
 import { useServerSupabase } from '@/lib/auth/server-supabase-provider';
 
 export default async function Ingredient({
@@ -12,28 +12,35 @@ export default async function Ingredient({
 
   const { data: ingredient } = await supabase
     .from('ingredients')
-    .select('*')
+    .select('* , ingredient_versions ( * )')
     .eq('id', params.id)
     .single();
 
-  // let current_version =
-  //   ingredient.versions.find((version) => version.is_active) ||
-  //   ingredient.versions.find((version) => version.is_inactive) ||
-  //   ingredient.versions.find((version) => version.is_deleted) ||
-  //   ingredient.versions[-1] ||
-  //   undefined;
+
+
+  let current_version: number | undefined;
+
+  if (ingredient?.ingredient_versions) {
+    let versions = [ingredient.ingredient_versions].flat();
+    current_version = versions.find((version) => version.status === "active")?.id ||
+    versions.find((version) => version.status === "preparation")?.id ||
+    versions.find((version) => version.status === "archived")?.id ||
+    versions.pop()?.id ||
+    undefined;
+  }
 
   return (
     <>
-      {/* @ts-expect-error Async Server Component
+    {current_version && 
+    (
+      <>
+      {/* @ts-expect-error Async Server Component */}
       <IngredientVersionWidget
-        ingredient={ingredient}
-        version_id={current_version?.id}
-      /> */}
-
-      <div className="flex w-full flex-row flex-wrap">
-        <pre>{JSON.stringify(ingredient, null, 2)}</pre>
-      </div>
+        ingredient_id={parseInt(params.id)}
+        version_id={current_version}
+      />
+      </>
+    )}
     </>
   );
 }

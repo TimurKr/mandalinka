@@ -127,24 +127,118 @@ export interface Database {
           label?: string
         }
       }
-      ingredient_versions: {
+      ingredient_version_order: {
         Row: {
+          amount: number
+          cost: number
           created_at: string | null
+          delivery_at: string
+          expires_at: string
+          extra_info: Json | null
           id: number
-          ingredient: number
-          status: Database["public"]["Enums"]["ingredient_status"]
+          in_stock: number
+          ingredient_version: number
+          ordered_at: string
+          status: Database["public"]["Enums"]["order_status"]
+          status_changed_at: string
+          unit: number
         }
         Insert: {
+          amount: number
+          cost: number
           created_at?: string | null
+          delivery_at: string
+          expires_at: string
+          extra_info?: Json | null
           id?: number
-          ingredient: number
-          status?: Database["public"]["Enums"]["ingredient_status"]
+          in_stock: number
+          ingredient_version: number
+          ordered_at: string
+          status: Database["public"]["Enums"]["order_status"]
+          status_changed_at?: string
+          unit: number
         }
         Update: {
+          amount?: number
+          cost?: number
           created_at?: string | null
+          delivery_at?: string
+          expires_at?: string
+          extra_info?: Json | null
           id?: number
-          ingredient?: number
+          in_stock?: number
+          ingredient_version?: number
+          ordered_at?: string
+          status?: Database["public"]["Enums"]["order_status"]
+          status_changed_at?: string
+          unit?: number
+        }
+      }
+      ingredient_version_remove: {
+        Row: {
+          amount: number
+          created_at: string | null
+          extra_info: Json | null
+          id: number
+          ingredient_version: number
+          reason: Database["public"]["Enums"]["ingredient_version_removal_reason"]
+          removed_at: string
+          unit: number
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          extra_info?: Json | null
+          id?: number
+          ingredient_version: number
+          reason: Database["public"]["Enums"]["ingredient_version_removal_reason"]
+          removed_at?: string
+          unit: number
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          extra_info?: Json | null
+          id?: number
+          ingredient_version?: number
+          reason?: Database["public"]["Enums"]["ingredient_version_removal_reason"]
+          removed_at?: string
+          unit?: number
+        }
+      }
+      ingredient_versions: {
+        Row: {
+          cost: number
+          created_at: string | null
+          expiration_period: number
+          id: number
+          in_stock: number
+          ingredient: number
+          source: string
+          status: Database["public"]["Enums"]["ingredient_status"]
+          status_changed_at: string
+        }
+        Insert: {
+          cost: number
+          created_at?: string | null
+          expiration_period?: number
+          id?: number
+          in_stock?: number
+          ingredient: number
+          source: string
           status?: Database["public"]["Enums"]["ingredient_status"]
+          status_changed_at?: string
+        }
+        Update: {
+          cost?: number
+          created_at?: string | null
+          expiration_period?: number
+          id?: number
+          in_stock?: number
+          ingredient?: number
+          source?: string
+          status?: Database["public"]["Enums"]["ingredient_status"]
+          status_changed_at?: string
         }
       }
       ingredients: {
@@ -441,7 +535,20 @@ export interface Database {
     }
     Enums: {
       ingredient_status: "active" | "preparation" | "archived"
+      ingredient_version_removal_reason:
+        | "expired"
+        | "expired_before_expiration"
+        | "unfit_to_sell"
+        | "other"
+        | "used"
       measurement_system: "metric" | "imperial"
+      order_status:
+        | "awaiting_order"
+        | "ordered"
+        | "delivered"
+        | "canceled"
+        | "returned"
+        | "other"
       physical_property: "mass" | "volume" | "length" | "count"
       pricing_plan_interval: "day" | "week" | "month" | "year"
       pricing_type: "one_time" | "recurring"

@@ -9,7 +9,7 @@ export default function ImageElement({ path }: { path?: string }) {
       <Image
         className="inset-0 aspect-square h-auto w-auto rounded-xl object-cover"
         src={path || '/ingredients/placeholder'}
-        alt="Nepodarilo sa načítať obrázok"
+        alt="Obrázok ingrediencie"
         width={512}
         height={512}
       />
