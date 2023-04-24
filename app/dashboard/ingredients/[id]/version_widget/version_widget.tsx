@@ -1,13 +1,13 @@
 import "server-only";
 
 import { notFound } from "next/navigation";
-import dynamic from "next/dynamic";
-import VersionSelector from "./version_selector";
+// import dynamic from "next/dynamic";
+// import VersionSelector from "./version_selector";
 import { BorderedElement } from "@/lib/ui/bordered_element";
 import GeneralInfo from "./general";
-import InStockManipulation from "./in_stock_manipulation";
-import Graph from "./graph";
-import StatusManipulation from "./status_manipulation";
+// import InStockManipulation from "./in_stock_manipulation";
+// import Graph from "./graph";
+// import StatusManipulation from "./status_manipulation";
 import { Suspense } from "react";
 import Loading from "@/lib/ui/loading_element";
 import { useServerSupabase } from "@/lib/auth/server-supabase-provider";

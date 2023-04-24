@@ -566,3 +566,21 @@ export interface Database {
     }
   }
 }
+
+export type Address = Database['public']['Tables']['address']['Row'];
+export type Alergens = Database['public']['Tables']['alergens']['Row'];
+export type Customers = Database['public']['Tables']['customers']['Row'];
+export type Diets = Database['public']['Tables']['diets']['Row'];
+export type Food_attributes = Database['public']['Tables']['food_attributes']['Row'];
+export type Ingredient_version_order = Database['public']['Tables']['ingredient_version_order']['Row'];
+export type Ingredient_version_remove = Database['public']['Tables']['ingredient_version_remove']['Row'];
+export type Ingredient_versions = Database['public']['Tables']['ingredient_versions']['Row'];
+export type Ingredients = Database['public']['Tables']['ingredients']['Row'];
+export type Kitchen_accessory = Database['public']['Tables']['kitchen_accessory']['Row'];
+export type M2M_ingredients_alergens = Database['public']['Tables']['M2M_ingredients_alergens']['Row'];
+export type Notifications = Database['public']['Tables']['notifications']['Row'];
+export type Prices = Database['public']['Tables']['prices']['Row'];
+export type Products = Database['public']['Tables']['products']['Row'];
+export type Subscriptions = Database['public']['Tables']['subscriptions']['Row'];
+export type Units = Database['public']['Tables']['units']['Row'];
+export type Users = Database['public']['Tables']['users']['Row'];
