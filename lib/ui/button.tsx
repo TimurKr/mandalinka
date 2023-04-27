@@ -1,24 +1,28 @@
 'use client';
 
+import type { Route } from 'next';
 import Link from 'next/link';
 
-interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  href?: string;
-  variant: 'primary' | 'secondary' | 'black' | 'danger' | 'warning' | 'success';
-  dark?: boolean;
-  className?: string;
-}
-
-const Button = (props: Props) => {
-  const { style, dark, className = '', href, children, ...buttonProps } = props;
-
-  if (href && (buttonProps.onClick || buttonProps.type)) {
+export default function Button<T extends string>(
+  props: Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'href'> & {
+    href?: Route<T> | URL;
+    variant:
+      | 'primary'
+      | 'secondary'
+      | 'black'
+      | 'danger'
+      | 'warning'
+      | 'success';
+    dark?: boolean;
+  }
+) {
+  if (props.href && (props.onClick || props.type)) {
     throw new Error('Button cannot have href and onClick or type');
-  } else if (!href && !buttonProps.onClick && !buttonProps.type) {
+  } else if (!props.href && !props.onClick && !props.type) {
     throw new Error('Button must have href, onClick or type');
   }
 
-  const buttonClassName = `${className} btn ${
+  const buttonClassName = `${props.className} btn ${
     props.variant === 'primary'
       ? props.dark
         ? 'btn-primary-dark'
@@ -46,20 +50,18 @@ const Button = (props: Props) => {
       : ''
   }`;
 
-  if (href && !buttonProps.disabled) {
+  if (props.href && !props.disabled) {
     return (
-      <Link href={href} className={buttonClassName}>
-        {children}
+      <Link href={props.href} className={buttonClassName}>
+        {props.children}
       </Link>
     );
   } else {
     return (
       // Spread all props to the button, but override the className
-      <button {...buttonProps} className={buttonClassName}>
-        {children}
+      <button {...props} className={buttonClassName}>
+        {props.children}
       </button>
     );
   }
-};
-
-export default Button;
+}

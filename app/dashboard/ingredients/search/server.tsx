@@ -1,15 +1,15 @@
 // import { Ingredient } from "@/components/fetching/ingredients_list";
 import Button from '@/lib/ui/button';
 
-import { useServerSupabase } from '@/lib/auth/server-supabase-provider';
+import { getServerSupabase } from '@/lib/auth/server-supabase-provider';
 
 import ClientSearch from './client';
 
 export default async function Search() {
-  const supabase = useServerSupabase();
+  const supabase = getServerSupabase();
 
   const { data, error } = await supabase
-    .from('ingredients')
+    .from('ingredient')
     .select('id, name, search_tags');
 
   if (error) throw error;

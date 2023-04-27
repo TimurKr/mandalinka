@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { useServerUser } from '@/lib/auth/server-supabase-provider';
+import { getServerUser } from '@/lib/auth/server-supabase-provider';
 import Navigation from './navigation';
 
 export default async function Layout({
@@ -7,7 +7,7 @@ export default async function Layout({
 }: {
   children: React.ReactNode;
 }) {
-  const user = await useServerUser();
+  const user = await getServerUser();
 
   if (!user) redirect('/auth?redirect_url=/account');
 

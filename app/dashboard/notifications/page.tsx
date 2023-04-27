@@ -1,17 +1,17 @@
 import {
-  useServerSupabase,
-  useServerUser,
+  getServerSupabase,
+  getServerUser,
 } from '@/lib/auth/server-supabase-provider';
-import Notification from './components/notification';
+import Notification from './_components/notification';
 
 export default async function Page() {
-  const supabase = useServerSupabase();
-  const user = await useServerUser();
+  const supabase = getServerSupabase();
+  const user = await getServerUser();
 
   if (!user) throw new Error('User not found');
 
   const { data: notifications, error } = await supabase
-    .from('notifications')
+    .from('notification')
     .select('*')
     .eq('user_id', user.id)
     .order('created_at', { ascending: false });
@@ -20,7 +20,7 @@ export default async function Page() {
 
   // Bulk update all notifications without href to read
   const { error: update_error } = await supabase
-    .from('notifications')
+    .from('notification')
     .update({
       read: true,
     })

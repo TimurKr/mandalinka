@@ -1,11 +1,11 @@
 import {
-  useServerSupabase,
-  useServerUser,
+  getServerSupabase,
+  getServerUser,
 } from '@/lib/auth/server-supabase-provider';
 
 import { redirect } from 'next/navigation';
 
-import Navigation from './components/navigation';
+import Navigation from './_components/navigation';
 
 // do not cache this page
 export const revalidate = 0;
@@ -15,8 +15,8 @@ export default async function Layout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = useServerSupabase();
-  const user = await useServerUser();
+  const supabase = getServerSupabase();
+  const user = await getServerUser();
 
   // Only allow unauthenticated users to see this page
   if (!user) {
@@ -24,7 +24,7 @@ export default async function Layout({
   }
 
   const { error, count } = await supabase
-    .from('notifications')
+    .from('notification')
     .select('*', { count: 'estimated', head: true })
     .eq('user_id', user.id)
     .eq('read', false);

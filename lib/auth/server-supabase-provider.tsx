@@ -2,23 +2,23 @@ import 'server-only';
 
 import { createServerComponentSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { headers, cookies } from 'next/headers';
-import { Database } from '@/lib/database.types';
+import type { Database } from '@/lib/database.types';
 
 // do not cache this page
 export const revalidate = 0;
 
-export function useServerSupabase() {
+export function getServerSupabase() {
   return createServerComponentSupabaseClient<Database>({ headers, cookies });
 }
 
-export async function useServerAuthentificated() {
-  const supabase = useServerSupabase();
+export async function getServerAuthentificated() {
+  const supabase = getServerSupabase();
   const { data: user } = await supabase.auth.getUser();
   return !!user;
 }
 
-export async function useServerUser() {
-  const supabase = useServerSupabase();
+export async function getServerUser() {
+  const supabase = getServerSupabase();
   const {
     data: { user: BaseUser },
   } = await supabase.auth.getUser();
@@ -26,7 +26,7 @@ export async function useServerUser() {
   if (!BaseUser) return null;
 
   const { data: ExtensionUser } = await supabase
-    .from('users')
+    .from('user')
     .select('*')
     .eq('id', BaseUser.id)
     .single();

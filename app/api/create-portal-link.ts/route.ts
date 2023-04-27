@@ -1,14 +1,14 @@
 import { getURL } from '@/lib/helpers';
 import {
-  useServerSupabase,
-  useServerUser,
+  getServerSupabase,
+  getServerUser,
 } from '@/lib/auth/server-supabase-provider';
 import { createOrRetrieveCustomer } from '@/lib/stripe/webhook_updates';
 import { stripe } from '@/lib/stripe/stripe';
 
 export async function POST() {
-  const supabase = useServerSupabase();
-  const user = await useServerUser();
+  const supabase = getServerSupabase();
+  const user = await getServerUser();
 
   try {
     if (!user) throw Error('Could not get user');

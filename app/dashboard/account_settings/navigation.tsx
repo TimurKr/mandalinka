@@ -2,6 +2,7 @@
 
 import { useSelectedLayoutSegment } from 'next/navigation';
 import Link from 'next/link';
+import { Route } from 'next';
 
 export default function Navigation() {
   const selected = useSelectedLayoutSegment();
@@ -9,14 +10,20 @@ export default function Navigation() {
   const pages = [
     {
       label: 'Všeobecné informácie',
-      href: '/dashboard/account_settings/general',
+      href: '/dashboard/account_settings/general' as Route,
     },
     {
       label: 'Adresy doručenia',
-      href: '/dashboard/account_settings/addresses',
+      href: '/dashboard/account_settings/addresses' as Route,
     },
-    { label: 'Preferencie', href: '/dashboard/account_settings/preferences' },
-    { label: 'Notifikácie', href: '/dashboard/account_settings/notifications' },
+    {
+      label: 'Preferencie',
+      href: '/dashboard/account_settings/preferences' as Route,
+    },
+    {
+      label: 'Notifikácie',
+      href: '/dashboard/account_settings/notifications' as Route,
+    },
   ];
 
   console.log(selected);

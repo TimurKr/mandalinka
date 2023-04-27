@@ -1,6 +1,6 @@
 import { redirect, useSearchParams } from 'next/navigation';
 import Authentificate from './auth_element';
-import { useServerUser } from '@/lib/auth/server-supabase-provider';
+import { getServerUser } from '@/lib/auth/server-supabase-provider';
 
 export const revalidate = 0;
 
@@ -24,7 +24,7 @@ export default async function Page({
   };
 }) {
   // Protect route
-  const user = await useServerUser();
+  const user = await getServerUser();
 
   // artifically wait for 2 seconds
   await new Promise((resolve) => setTimeout(resolve, 1000));

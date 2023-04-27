@@ -1,26 +1,33 @@
 'use client';
 
-import { Option } from '@/lib/forms/select_multiple';
-import Alert from '@/lib/ui/alert';
 import { useState, useCallback } from 'react';
-
-import { Formik, Form, Field } from 'formik';
-import SelectMultipleField from '@/lib/forms/select_multiple';
-import FileInput from '@/lib/forms/file';
-import ErrorMessage from '@/lib/forms/error_message';
-import Button from '@/lib/ui/button';
-import { Label, TextInput, Select, Textarea } from 'flowbite-react';
-import * as Yup from 'yup';
+import { useRouter } from 'next/navigation';
 import { useClientSupabase } from '@/lib/auth/client-supabase-provider';
 
-interface FormValues {
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
+
+import type { InsertIngredient } from '@/lib/database.types';
+
+import Alert from '@/lib/ui/alert';
+import Button from '@/lib/ui/button';
+import {
+  TextArea,
+  TextInput,
+  FileInput,
+  Option,
+  SelectInput,
+  SelectMultipleInput,
+} from '@/lib/forms/inputs';
+
+type FormValues = {
   name: string;
   extra_info?: string;
   search_tags?: string;
   img: File | '';
   alergens: string[];
   unit: string;
-}
+};
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Povinné pole'),
@@ -40,6 +47,7 @@ export default function AddIngredientForm({
 }) {
   const [error, setError] = useState<string | null>(null);
   const supabase = useClientSupabase();
+  const router = useRouter();
 
   const handleSubmit = useCallback(
     async (values: FormValues) => {
@@ -50,7 +58,7 @@ export default function AddIngredientForm({
       let path: string | null = null;
 
       const { data: ingredient, error } = await supabase
-        .from('ingredients')
+        .from('ingredient')
         .insert({
           name: name,
           extra_info: extra_info,
@@ -58,7 +66,7 @@ export default function AddIngredientForm({
             ?.split(',')
             .map((tag) => tag.trim())
             .filter((tag) => tag !== ''),
-          unit: parseInt(unit),
+          unit: unit,
         })
         .select('id, name')
         .maybeSingle();
@@ -70,7 +78,7 @@ export default function AddIngredientForm({
       }
 
       const { data: alergensData, error: alergensError } = await supabase
-        .from('M2M_ingredients_alergens')
+        .from('ingredient_alergen')
         .insert(
           alergens.map((alergen) => ({
             ingredient: ingredient.id,
@@ -105,7 +113,7 @@ export default function AddIngredientForm({
         path = data.path;
 
         const { error: updateError } = await supabase
-          .from('ingredients')
+          .from('ingredient')
           .update({ img: path })
           .eq('id', ingredient.id);
 
@@ -115,8 +123,9 @@ export default function AddIngredientForm({
           return;
         }
       }
+      router.push(`/dashboard/ingredients/${ingredient.id}`);
     },
-    [supabase]
+    [router, supabase]
   );
 
   const initialValues: FormValues = {
@@ -138,59 +147,30 @@ export default function AddIngredientForm({
         <Alert variant="danger" onClose={() => setError(null)}>
           {error}
         </Alert>
-        <div className="p-1">
-          <Label htmlFor="name">Názov</Label>
-          <Field name="name" as={TextInput} />
-          <ErrorMessage name="name" />
-        </div>
-        <div className="p-1">
-          <Label htmlFor="extra_info">Extra info</Label>
-          <Field
-            name="extra_info"
-            as={Textarea}
-            helperText="Zadajte dáta vo fomráte JSON"
-          />
-          <ErrorMessage name="extra_info" />
-        </div>
-        <div className="p-1">
-          <Label htmlFor="img">Obrázok</Label>
-          <FileInput name="img" />
-          <ErrorMessage name="img" />
-        </div>
-        <div className="p-1">
-          <Label htmlFor="unit">Jednotka</Label>
-          <Field name="unit" as={Select}>
-            {units.map((unit) => (
-              <option value={unit.value} key={unit.value}>
-                {unit.label}
-              </option>
-            ))}
-          </Field>
-          <ErrorMessage name="unit" />
-        </div>
-        <div className="p-1 py-2">
-          <Label htmlFor="alergens">Alergény</Label>
-          <SelectMultipleField
-            name="alergens"
-            options={alergens}
-            helperText="Zvolte všetky aplikovatelné"
-          />
-          <ErrorMessage name="alergens" />
-        </div>
-        <div className="p-1">
-          <Label htmlFor="search_tags">Hľadané tagy</Label>
-          <Field
-            name="search_tags"
-            as={TextInput}
-            helperText="Oddelujte čiarkou"
-          />
-          <ErrorMessage name="search_tags" />
-        </div>
-        <div className="p-1">
-          <Button variant="primary" type="submit">
-            Vytvoriť
-          </Button>
-        </div>
+        <TextInput name="name" label="Názov" />
+        <TextArea
+          name="extra_info"
+          label="Extra informácie"
+          helperText="Zadajte dáta vo formáte JSON"
+        />
+        <FileInput name="img" label="Obrázok" />
+
+        <SelectInput name="unit" label="Jednotka" options={units} />
+        <SelectMultipleInput
+          name="alergens"
+          label="Alergény"
+          options={alergens}
+          helperText="Zvolte všetky aplikovatelné"
+        />
+
+        <TextInput
+          name="search_tags"
+          label="Hľadané tagy"
+          helperText="Oddelujte čiarkou"
+        />
+        <Button variant="primary" type="submit">
+          Vytvoriť
+        </Button>
       </Form>
     </Formik>
   );

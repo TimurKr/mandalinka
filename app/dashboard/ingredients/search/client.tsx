@@ -7,16 +7,11 @@ import Fuse from 'fuse.js';
 
 import { useRouter } from 'next/navigation';
 
-// import { Ingredient } from "@/components/fetching/ingredients_list";
 import Button from '@/lib/ui/button';
-
 import Alert from '@/lib/ui/alert';
 
-type Ingredient = {
-  id: number;
-  name: string;
-  search_tags: string[] | null;
-};
+import type { Ingredient as FullIngredient } from '@/lib/database.types';
+type Ingredient = Pick<FullIngredient, 'id' | 'name' | 'search_tags'>;
 
 export default function ClientSearch({
   ingredients,
@@ -25,9 +20,8 @@ export default function ClientSearch({
 }) {
   // Declare states
   const [search, setSearch] = useState('');
-  const [matchingIngredients, setMatchingIngredients] = useState<Ingredient[]>(
-    []
-  );
+  const [matchingIngredients, setMatchingIngredients] =
+    useState<Ingredient[]>(ingredients);
 
   // Router for redirecting
   const router = useRouter();
@@ -40,7 +34,7 @@ export default function ClientSearch({
   );
 
   const currentIngredient = ingredients.find(
-    (ingredient: Ingredient) => selected == ingredient.id.toString()
+    (ingredient) => selected == ingredient.id.toString()
   );
 
   const moveSelectedIngredientToTop = useCallback(

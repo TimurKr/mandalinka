@@ -1,4 +1,4 @@
-import { useServerUser } from '@/lib/auth/server-supabase-provider';
+import { getServerUser } from '@/lib/auth/server-supabase-provider';
 
 import { redirect } from 'next/navigation';
 
@@ -10,7 +10,7 @@ export default async function Layout({
 }: {
   children: React.ReactNode;
 }) {
-  const user = await useServerUser();
+  const user = await getServerUser();
 
   // Only allow unauthenticated users to see this page
   if (user) {

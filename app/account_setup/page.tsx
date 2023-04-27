@@ -1,10 +1,9 @@
-import Button from '@/lib/ui/button';
-import SkipButton from './componenets/skip_button';
-import { useServerUser } from '@/lib/auth/server-supabase-provider';
+import SkipButton from './_componenets/skip_button';
+import { getServerUser } from '@/lib/auth/server-supabase-provider';
 import { redirect } from 'next/navigation';
 
 export default async function Page() {
-  const user = await useServerUser();
+  const user = await getServerUser();
   if (!user) redirect('/auth');
   return (
     <section className="h-screen w-screen bg-slate-100">
