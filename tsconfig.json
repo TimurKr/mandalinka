@@ -29,7 +29,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "lib/storage/supabase-image-loader.js"
+    "utils/storage/supabase-image-loader.js"
   ],
   "exclude": ["node_modules"],
   "ts-node": {

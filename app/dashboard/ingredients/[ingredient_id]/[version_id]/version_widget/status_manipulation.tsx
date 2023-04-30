@@ -1,84 +1,60 @@
 'use client';
 
-import Alert from '@/components/alert';
-import Button from '@/components/button';
-import { IngredientVersion } from '@/components/fetching/ingredient_detail';
+import { useSupabase } from '@/utils/supabase/client';
+import { IngredientVersion } from '@/utils/db.types';
+import Alert from '@/lib/ui/alert';
+import Button from '@/lib/ui/button';
+import ConfirmationModal from '@/lib/ui/confirmation_modal';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { startTransition, useState } from 'react';
 
-const ConfirmationModal = dynamic(
-  () => import('@/components/confirmation_modal'),
-  { ssr: false }
-);
-
 export default function StatusManipulation({
   ingredientVersion,
-  CLIENT_API_URL,
 }: {
-  ingredientVersion: IngredientVersion;
-  CLIENT_API_URL: string;
+  ingredientVersion: Pick<IngredientVersion, 'id' | 'ingredient' | 'status'> & {
+    orders_count: number;
+    removals_count: number;
+  };
 }) {
   const router = useRouter();
+  const supabase = useSupabase();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [confirmStatus, setConfirmStatus] = useState<
-    'active' | 'inactive' | 'deleted' | 'DELETE' | null
+    IngredientVersion['status'] | 'delete' | null
   >(null);
 
-  async function changeStatus(status: string | null) {
+  async function changeStatus(
+    status: IngredientVersion['status'] | 'delete' | null
+  ) {
     if (status === null) return;
 
-    if (status === 'DELETE') {
-      await fetch(
-        `${CLIENT_API_URL}/management/ingredients/versions/${ingredientVersion.id}/`,
-        {
-          method: 'DELETE',
-        }
-      )
-        .then((response) => {
-          if (response.ok) {
-            setConfirmStatus(null);
-            return startTransition(() =>
-              router.push(
-                `/management/ingredients/${ingredientVersion.ingredient}/`
-              )
-            );
-          } else {
-            return response.json();
-          }
-        })
-        .then((response) => {
-          setErrorMessage(response?.detail);
-        })
-        .catch((error) => {
-          setErrorMessage(error.message);
+    if (status === 'delete') {
+      const { error } = await supabase
+        .from('ingredient_version')
+        .delete()
+        .eq('id', ingredientVersion.id);
+      if (error) {
+        setErrorMessage(error.message);
+      } else {
+        return startTransition(() => {
+          router.refresh(), setConfirmStatus(null);
         });
+      }
       return;
     }
 
-    const formData = new FormData();
-    formData.append('status', status);
-
-    await fetch(
-      `${CLIENT_API_URL}/management/ingredients/versions/${ingredientVersion.id}/`,
-      {
-        method: 'PATCH',
-        body: formData,
-      }
-    )
-      .then((response) => {
-        if (response.ok) {
-          window.location.reload();
-        } else {
-          return response.json();
-        }
-      })
-      .then((response) => {
-        setErrorMessage(response?.detail);
-      })
-      .catch((error) => {
-        setErrorMessage(error.message);
+    const { error } = await supabase
+      .from('ingredient_version')
+      .update({ status })
+      .eq('id', ingredientVersion.id);
+    if (error) {
+      setErrorMessage(error.message);
+    } else {
+      return startTransition(() => {
+        router.refresh(), setConfirmStatus(null);
       });
+    }
   }
 
   return (
@@ -91,47 +67,49 @@ export default function StatusManipulation({
         header={`Potvďte ${
           confirmStatus === 'active'
             ? 'aktiváciu'
-            : confirmStatus === 'inactive'
+            : confirmStatus === 'preparation'
             ? 'vrátenie do prípravy'
-            : confirmStatus === 'deleted'
+            : confirmStatus === 'archived'
             ? 'deaktiváciu'
-            : confirmStatus === 'DELETE'
+            : confirmStatus === 'delete'
             ? 'zmazanie'
             : ''
         }`}
         variant={
           confirmStatus === 'active'
             ? 'success'
-            : confirmStatus === 'inactive'
+            : confirmStatus === 'preparation'
             ? 'warning'
             : 'danger'
         }
       >
-        {confirmStatus === 'DELETE' ? 'Táto akcia je nevratná' : undefined}
+        {confirmStatus === 'delete' ? 'Táto akcia je nevratná' : undefined}
       </ConfirmationModal>
       <div className="flex items-center gap-2">
         <Alert variant="danger" onClose={() => setErrorMessage(null)}>
           {errorMessage}
         </Alert>
-        {(ingredientVersion.is_active || ingredientVersion.is_deleted) && (
+        {(ingredientVersion.status === 'active' ||
+          ingredientVersion.status === 'archived') && (
           <Button
             variant="warning"
-            onClick={() => setConfirmStatus('inactive')}
+            onClick={() => setConfirmStatus('preparation')}
             className="w-auto flex-none"
           >
             Do prípravy
           </Button>
         )}
-        {(ingredientVersion.is_inactive || ingredientVersion.is_active) && (
+        {(ingredientVersion.status === 'active' ||
+          ingredientVersion.status === 'preparation') && (
           <Button
             variant="danger"
-            onClick={() => setConfirmStatus('deleted')}
+            onClick={() => setConfirmStatus('archived')}
             className="w-auto flex-none"
           >
             Deaktivovať
           </Button>
         )}
-        {ingredientVersion.is_inactive && (
+        {ingredientVersion.status === 'preparation' && (
           <Button
             variant="success"
             onClick={() => setConfirmStatus('active')}
@@ -140,13 +118,13 @@ export default function StatusManipulation({
             Aktivovať
           </Button>
         )}
-        {ingredientVersion.is_inactive &&
-          ingredientVersion.orders.length == 0 &&
-          ingredientVersion.removals.length == 0 && (
+        {ingredientVersion.status === 'preparation' &&
+          ingredientVersion.orders_count === 0 &&
+          ingredientVersion.removals_count === 0 && (
             <Button
               variant="danger"
               dark
-              onClick={() => setConfirmStatus('DELETE')}
+              onClick={() => setConfirmStatus('delete')}
               className="w-auto flex-none"
             >
               Zmazať

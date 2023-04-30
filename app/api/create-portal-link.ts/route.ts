@@ -1,10 +1,8 @@
-import { getURL } from '@/lib/helpers';
-import {
-  getServerSupabase,
-  getServerUser,
-} from '@/lib/auth/server-supabase-provider';
-import { createOrRetrieveCustomer } from '@/lib/stripe/webhook_updates';
-import { stripe } from '@/lib/stripe/stripe';
+import { getURL } from '@/utils/helpers';
+import { getServerUser } from '@/utils/auth/server';
+import { getServerSupabase } from '@/utils/supabase/server';
+import { createOrRetrieveCustomer } from '@/utils/stripe/webhook_updates';
+import { stripe } from '@/utils/stripe/stripe';
 
 export async function POST() {
   const supabase = getServerSupabase();

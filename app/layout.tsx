@@ -11,7 +11,7 @@ import 'flowbite';
 
 import { Analytics } from '@vercel/analytics/react';
 
-import SupabaseProvider from '../lib/auth/client-supabase-provider';
+import { SupabaseProvider } from '@/utils/supabase/client';
 
 const font = Lora({
   subsets: ['latin-ext'],

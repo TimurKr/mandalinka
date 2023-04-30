@@ -8,7 +8,7 @@ const nextConfig = {
   },
   images: {
     loader: 'custom',
-    loaderFile: './lib/storage/supabase-image-loader.js',
+    loaderFile: './utils/storage/supabase-image-loader.js',
   },
 };
 

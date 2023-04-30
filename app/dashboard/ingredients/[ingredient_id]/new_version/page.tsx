@@ -6,7 +6,7 @@ import IngredientVersionWidget from '../[version_id]/version_widget';
 import IngredientVersionForm from '../_componenets/ingredient_version_form';
 import { BorderedElement } from '@/lib/ui/bordered_element';
 import VersionSelector from '../_componenets/version_selector';
-import { getServerSupabase } from '@/lib/auth/server-supabase-provider';
+import { getServerSupabase } from '@/utils/supabase/server';
 
 export default async function Ingredient({
   params,

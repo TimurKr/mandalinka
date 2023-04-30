@@ -1,5 +1,5 @@
 import SkipButton from './_componenets/skip_button';
-import { getServerUser } from '@/lib/auth/server-supabase-provider';
+import { getServerUser } from '@/utils/auth/server';
 import { redirect } from 'next/navigation';
 
 export default async function Page() {

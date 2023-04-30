@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { CloudArrowUpIcon } from '@heroicons/react/20/solid';
 
 import { useField, FieldHookConfig } from 'formik';
-import ErrorMessage from '../error_message';
+import ErrorMessage from './error_message';
 import { useDropzone } from 'react-dropzone';
 import { TrashIcon } from '@heroicons/react/24/outline';
 
@@ -15,7 +15,7 @@ type FileInputProps = FieldHookConfig<File> & {
   thumbnail_height?: number;
 };
 
-export function FileInput({ ...props }: FileInputProps) {
+export default function RawFileInput({ ...props }: FileInputProps) {
   const [field, meta, helpers] = useField(props.name);
   const { getRootProps, getInputProps } = useDropzone({
     maxFiles: 1,

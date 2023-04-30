@@ -11,19 +11,17 @@ import { Modal, Table, Tooltip } from 'flowbite-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-import type { IngredientVersionRemoval } from '@/lib/database.types';
+import type { IngredientVersionRemoval } from '@/utils/db.types';
 
 type Remomoval = IngredientVersionRemoval;
 
 export default function RemovalsTable({
   data,
-  delete_url,
 }: {
   data: Pick<
     Remomoval,
     'id' | 'removed_at' | 'amount' | 'unit' | 'reason' | 'extra_info'
   >[];
-  delete_url: string;
 }) {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [deleteID, setDeleteID] = useState<number | null>(null);
@@ -31,21 +29,21 @@ export default function RemovalsTable({
   async function deleteRemoval(id: number | null) {
     if (id === null) return;
 
-    const response = await fetch(delete_url + id.toString() + '/', {
-      method: 'DELETE',
-    })
-      .then((response) => {
-        setDeleteID(null);
-        if (response.ok) {
-          window.location.reload();
-        } else {
-          return response.json();
-        }
-      })
-      .catch((error) => {
-        console.log('Error: ', error);
-        setErrorMessage('Nastala chyba pri spracovaní odpovede zo servera');
-      });
+    // const response = await fetch(delete_url + id.toString() + '/', {
+    //   method: 'DELETE',
+    // })
+    //   .then((response) => {
+    //     setDeleteID(null);
+    //     if (response.ok) {
+    //       window.location.reload();
+    //     } else {
+    //       return response.json();
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.error('Error: ', error);
+    //     setErrorMessage('Nastala chyba pri spracovaní odpovede zo servera');
+    //   });
   }
 
   // Sort removals by date

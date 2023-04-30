@@ -3,11 +3,14 @@ import Image from 'next/image';
 
 import Button from '@/lib/ui/button';
 import { BorderedElement } from '@/lib/ui/bordered_element';
-import { getServerSupabase } from '@/lib/auth/server-supabase-provider';
+import { getServerSupabase } from '@/utils/supabase/server';
 import ImageElement from './_componenets/image';
 import VersionSelector from './_componenets/version_selector';
-import { getArray } from '@/lib/supabase/fetch-helpers';
+import { getArray } from '@/utils/fetch/helpers';
 import { useSelectedLayoutSegment } from 'next/navigation';
+import { IngredientVersion } from '@/utils/db.types';
+import ClientStore from '@/utils/zustand/client';
+import { useStore } from '@/utils/zustand';
 
 export default async function Layout({
   children,
@@ -25,6 +28,8 @@ export default async function Layout({
       id, 
       name, 
       img,
+      in_stock,
+      unit,
       alergens:alergen (id, label),
       extra_info,
       versions:ingredient_version (id, status, created_at)
@@ -38,41 +43,50 @@ export default async function Layout({
     .select('*')
     .order('id', { ascending: true });
 
-  const unitsPromise = supabase.from('unit').select('*');
-
   const [
-    { data: ingredient, error: ingredientError },
+    { data: ingredientData, error: ingredientError },
     { data: alergens, error: alergensError },
-    { data: units, error: unitsError },
-  ] = await Promise.all([ingredientPromise, alergensPromise, unitsPromise]);
+  ] = await Promise.all([ingredientPromise, alergensPromise]);
 
-  if (
-    ingredientError ||
-    alergensError ||
-    unitsError ||
-    !ingredient ||
-    !alergens ||
-    !units
-  ) {
+  if (ingredientError || alergensError || !ingredientData || !alergens) {
     throw new Error(
-      `Error loading ingredient: ${ingredientError?.message} | Alergens: ${alergensError?.message} | Units: ${unitsError?.message}`
+      `Error loading ingredient: ${ingredientError?.message} | Alergens: ${alergensError?.message}`
     );
   }
 
+  useStore.setState({ alergens });
+
+  const ingredient = {
+    ...ingredientData,
+    alergens: getArray(ingredientData.alergens),
+    versions: getArray(ingredientData.versions),
+    status:
+      getArray(ingredientData.versions).find(
+        (version) => version.status === 'active'
+      )?.status ??
+      getArray(ingredientData.versions).find(
+        (version) => version.status === 'preparation'
+      )?.status ??
+      getArray(ingredientData.versions).find(
+        (version) => version.status === 'archived'
+      )?.status ??
+      ('uninmplemented' as IngredientVersion['status'] | 'uninmplemented'),
+  };
+
   return (
     <div className="flex w-full max-w-6xl flex-row flex-wrap self-start justify-self-center">
+      <ClientStore data={{ alergens }} />
       <div className="w-full flex-shrink-0 p-2">
         <h3
-          className="text-4xl"
-          // className={`text-4xl ${
-          //   ingredient.is_active
-          //     ? "text-green-500"
-          //     : ingredient.is_deleted
-          //     ? "text-red-500"
-          //     : ingredient.is_inactive
-          //     ? "text-yellow-500"
-          //     : "text-gray-500"
-          // }`}
+          className={`text-4xl ${
+            ingredient.status === 'active'
+              ? 'text-green-500'
+              : ingredient.status === 'preparation'
+              ? 'text-red-500'
+              : ingredient.status === 'archived'
+              ? 'text-yellow-500'
+              : 'text-gray-500'
+          }`}
         >
           {ingredient.name}
         </h3>
@@ -123,8 +137,9 @@ export default async function Layout({
       </div>
       <div className="flex-1 basis-1/4 p-2">
         <BorderedElement title="Na sklade">
-          <p className="text-sm text-gray-400">N/A</p>
-          {/* {ingredient.in_stock_amount} {ingredient.unit.sign} */}
+          <p className="px-2">
+            {ingredient.in_stock} {ingredient.unit}
+          </p>
         </BorderedElement>
       </div>
       <div className="flex-1 basis-1/4 p-2">

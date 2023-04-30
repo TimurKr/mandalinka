@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-import { stripe } from '@/lib/stripe/stripe';
+import { stripe } from '@/utils/stripe/stripe';
 import {
   manageSubscriptionStatusChange,
   upsertPriceRecord,
   upsertProductRecord,
-} from '@/lib/stripe/webhook_updates';
+} from '@/utils/stripe/webhook_updates';
 
 // Stripe requires the raw body to construct the event.
 const config = {

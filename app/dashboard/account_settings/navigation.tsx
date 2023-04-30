@@ -26,8 +26,6 @@ export default function Navigation() {
     },
   ];
 
-  console.log(selected);
-
   return (
     <div>
       {pages.map((page) => (

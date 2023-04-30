@@ -2,33 +2,29 @@ import 'server-only';
 
 import React from 'react';
 import AddIngredientForm from './ingredient_form';
-import { getServerSupabase } from '@/lib/auth/server-supabase-provider';
+import { getServerSupabase } from '@/utils/supabase/server';
+import { useStore } from '@/utils/zustand';
+import ClientStore from '@/utils/zustand/client';
 
 export default async function NewIngredient() {
   const supabase = getServerSupabase();
 
-  const { data: alergens, error: alergensError } = await supabase
+  const { data: alergens } = await supabase
     .from('alergen')
-    .select('id, label');
+    .select('id, label')
+    .throwOnError();
 
-  const { data: units, error: unitsError } = await supabase
-    .from('unit')
-    .select('sign, name');
-
-  if (alergensError || unitsError) {
-    throw new Error('Error fetching alergens or units');
+  if (!alergens) {
+    throw new Error('No alergens fetched.');
   }
+
+  useStore.setState({ alergens });
 
   return (
     <div className="flex h-full flex-col items-center">
+      <ClientStore data={{ alergens }} />
       <div className="my-auto py-5">
-        <AddIngredientForm
-          alergens={alergens.map((alergen) => ({
-            value: alergen.id,
-            label: `${alergen.id}: ${alergen.label}`,
-          }))}
-          units={units.map((unit) => ({ value: unit.sign, label: unit.name }))}
-        />
+        <AddIngredientForm />
       </div>
     </div>
   );

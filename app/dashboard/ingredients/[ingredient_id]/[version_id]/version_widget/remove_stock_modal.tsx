@@ -1,34 +1,40 @@
-import Alert from '@/components/alert';
-import Button from '@/components/button';
-import { IngredientVersion } from '@/components/fetching/ingredient_detail';
-import { Unit } from '@/components/fetching/units';
-import DateTimeInput from '@/components/form_elements/date_time';
-import NumberInput from '@/components/form_elements/number';
-import parseInvalidResponse from '@/components/form_elements/parse_invalid_response';
-import SelectInput from '@/components/form_elements/select';
-import TextInput from '@/components/form_elements/text';
-import { Modal } from 'flowbite-react';
-import { Form, Formik } from 'formik';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
+
+import {
+  IngredientVersion,
+  IngredientVersionRemoval,
+  InsertIngredientVersionRemoval,
+  Unit,
+} from '@/utils/db.types';
+
+import Alert from '@/lib/ui/alert';
+import Button from '@/lib/ui/button';
+import { Checkbox, Label, Modal } from 'flowbite-react';
+import {
+  DateTimeInput,
+  NumberInput,
+  SelectInput,
+  TextInput,
+} from '@/lib/forms';
 
 export default function RemoveModal({
   show,
   units,
   onClose,
   ingredientVersion,
-  submit_url,
-  router,
 }: {
   show: boolean;
-  units: Unit[];
+  units: Pick<Unit, 'sign' | 'name' | 'property'>[];
   onClose: () => void;
-  ingredientVersion: IngredientVersion;
-  submit_url: string;
-  router: ReturnType<typeof useRouter>;
+  ingredientVersion: Pick<IngredientVersion, 'id' | 'in_stock'> & {
+    unit: Pick<Unit, 'sign' | 'property'>;
+  };
 }) {
-  const [all, setAll] = useState(false);
+  const [removeAll, setRemoveAll] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -40,23 +46,41 @@ export default function RemoveModal({
       setFieldError: (field: string, errorMsg: string) => void;
     }
   ) {
-    const formValues = new FormData();
-    formValues.append('ingredient_version', ingredientVersion.id.toString());
-    formValues.append('amount', values.amount);
-    formValues.append('unit', values.unit.toString());
-    values.order_date instanceof Date
-      ? formValues.append('date', values.date.toISOString())
-      : formValues.append('date', new Date(values.date).toISOString());
-    formValues.append('reason', values.reason);
-    formValues.append('description', values.description);
-
-    const response = await fetch(submit_url, {
-      method: 'POST',
-      body: formValues,
-    }).then((response) => {
-      parseInvalidResponse(response, setFieldError, setErrorMessage, true);
-    });
+    // const formValues = new FormData();
+    // formValues.append('ingredient_version', ingredientVersion.id.toString());
+    // formValues.append('amount', values.amount);
+    // formValues.append('unit', values.unit.toString());
+    // values.order_date instanceof Date
+    //   ? formValues.append('date', values.date.toISOString())
+    //   : formValues.append('date', new Date(values.date).toISOString());
+    // formValues.append('reason', values.reason);
+    // formValues.append('description', values.description);
+    // const response = await fetch(submit_url, {
+    //   method: 'POST',
+    //   body: formValues,
+    // }).then((response) => {
+    //   parseInvalidResponse(response, setFieldError, setErrorMessage, true);
+    // });
   }
+
+  // TODO: Make this a one-liner perhaps extend-better-supabase types to export enums as well
+  type Reason = {
+    temp: IngredientVersionRemoval['reason'];
+  };
+
+  let reasons = Object.freeze<string[]>(
+    Object.values<Reason['temp']>({} as Reason)
+  );
+
+  const initialValues = {
+    ingredient_version: ingredientVersion.id,
+    amount: undefined as unknown as number,
+    unit: ingredientVersion.unit.sign,
+    date: new Date(),
+    reason: 'expired' as IngredientVersionRemoval['reason'],
+    description: undefined,
+    all: false,
+  } as InsertIngredientVersionRemoval;
 
   return (
     <Modal dismissible={true} show={show} onClose={onClose} size="md">
@@ -72,7 +96,7 @@ export default function RemoveModal({
         <Formik
           initialValues={{
             amount: 0,
-            unit: ingredientVersion.unit.id,
+            unit: ingredientVersion.unit.sign,
             date: new Date(),
             reason: '',
             description: '',
@@ -83,7 +107,7 @@ export default function RemoveModal({
             amount: Yup.number()
               .required('Required')
               .min(0, 'Zadajte kladné číslo'),
-            unit: Yup.number().required('Required'),
+            unit: Yup.string().required('Required'),
             // Date must be today or in the past
             date: Yup.date()
               .required('Required')
@@ -91,7 +115,10 @@ export default function RemoveModal({
                 new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
                 'Nemôžete nastaviť dátum na viac ako 24 hod v budúcnosti.'
               ),
-            reason: Yup.string().required('Required'),
+            reason:
+              Yup.mixed<InsertIngredientVersionRemoval['reason']>().required(
+                'Required'
+              ),
             description: Yup.string().when('reason', {
               is: 'other',
               then: () => Yup.string().required('Required'),
@@ -99,68 +126,61 @@ export default function RemoveModal({
           })}
         >
           {(props) => (
-            <Form className="flex flex-wrap items-center gap-2">
-              <div className="flex-auto">
-                <NumberInput name="amount" label="Množstvo" disabled={all} />
-              </div>
-              <div className="flex-auto">
-                <SelectInput
-                  name="unit"
-                  label="Jednotka"
-                  options={units.map((unit) => ({
-                    value: unit.id,
+            <Form className="">
+              <NumberInput
+                name="amount"
+                label="Množstvo"
+                disabled={removeAll}
+              />
+              <SelectInput
+                name="unit"
+                label="Jednotka"
+                options={units
+                  .filter(
+                    (unit) => unit.property === ingredientVersion.unit.property
+                  )
+                  .map((unit) => ({
+                    value: unit.sign,
                     label: unit.name,
                   }))}
-                  disabled={all}
-                />
-              </div>
-              <div className="flex flex-auto items-center">
-                <input
-                  id="all-checkbox"
-                  type="checkbox"
-                  className="rounded text-primary focus:outline-primary focus:ring-primary"
+                disabled={removeAll}
+              />
+              <div className="flex flex-auto items-center gap-2 px-2">
+                <Checkbox
+                  id="all-checkbox "
+                  className=""
+                  // checked={removeAll}
                   onChange={(event) => {
-                    setAll(event.target.checked);
+                    setRemoveAll(event.target.checked);
                     props.setFieldValue(
                       'amount',
-                      ingredientVersion.in_stock_amount
+                      event.target.checked
+                        ? ingredientVersion.in_stock
+                        : props.initialValues.amount
                     );
-                    props.setFieldValue('unit', ingredientVersion.unit.id);
+                    props.setFieldValue('unit', ingredientVersion.unit);
                   }}
                 />
-                <label
-                  htmlFor="all-checkbox"
-                  className="px-2 text-sm text-gray-700"
-                >
-                  Všetko na sklade
-                </label>
+                <Label htmlFor="all-checkbox">Všetko na sklade</Label>
               </div>
-              <div className="flex-auto">
-                <DateTimeInput name="date" label="Dátum a čas" time />
-              </div>
-              <div className="flex-auto shrink-0">
-                <SelectInput
-                  name="reason"
-                  label="Zadajte dôvod"
-                  options={[
-                    { value: 'expired', label: 'Expirovalo' },
-                    { value: 'went_bad', label: 'Pokazilo sa pred expiráciou' },
-                    { value: 'other', label: 'Iné' },
-                  ]}
-                />
-              </div>
-              <div className="flex-auto shrink-0">
-                <TextInput name="description" label="Poznámka" />
-              </div>
-              <div className="flex-auto">
-                <Button
-                  type="submit"
-                  variant="primary"
-                  disabled={props.isSubmitting}
-                >
-                  Odobrať
-                </Button>
-              </div>
+              <DateTimeInput name="date" label="Dátum a čas" time />
+              <SelectInput
+                name="reason"
+                label="Zadajte dôvod"
+                options={reasons.map((reason) => ({
+                  value: reason,
+                  label: reason,
+                }))}
+              />
+              <TextInput name="description" label="Poznámka" />
+              <Button
+                className="mt-4"
+                type="submit"
+                variant="primary"
+                disabled={props.isSubmitting}
+              >
+                Odobrať
+              </Button>
             </Form>
           )}
         </Formik>

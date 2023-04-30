@@ -133,27 +133,30 @@ export interface Database {
           extra_info: Json | null;
           id: number;
           img: string | null;
+          in_stock: number;
           name: string;
           search_tags: string[] | null;
-          unit: string | null;
+          unit: string;
         };
         Insert: {
           created_at?: string | null;
           extra_info?: Json | null;
           id?: number;
           img?: string | null;
+          in_stock?: number;
           name: string;
           search_tags?: string[] | null;
-          unit?: string | null;
+          unit: string;
         };
         Update: {
           created_at?: string | null;
           extra_info?: Json | null;
           id?: number;
           img?: string | null;
+          in_stock?: number;
           name?: string;
           search_tags?: string[] | null;
-          unit?: string | null;
+          unit?: string;
         };
       };
       ingredient_alergen: {
@@ -213,13 +216,13 @@ export interface Database {
           amount: number;
           cost: number;
           created_at: string;
-          delivery_at: string;
-          expires_at: string;
+          delivery_at: string | null;
+          expires_at: string | null;
           extra_info: Json | null;
           id: number;
           in_stock: number;
           ingredient_version: number;
-          ordered_at: string;
+          ordered_at: string | null;
           status: Database['public']['Enums']['ingredient_version_order_status'];
           status_changed_at: string;
           unit: string;
@@ -228,14 +231,14 @@ export interface Database {
           amount: number;
           cost: number;
           created_at?: string;
-          delivery_at: string;
-          expires_at: string;
+          delivery_at?: string | null;
+          expires_at?: string | null;
           extra_info?: Json | null;
           id?: number;
-          in_stock: number;
+          in_stock?: number;
           ingredient_version: number;
-          ordered_at: string;
-          status: Database['public']['Enums']['ingredient_version_order_status'];
+          ordered_at?: string | null;
+          status?: Database['public']['Enums']['ingredient_version_order_status'];
           status_changed_at?: string;
           unit: string;
         };
@@ -243,13 +246,13 @@ export interface Database {
           amount?: number;
           cost?: number;
           created_at?: string;
-          delivery_at?: string;
-          expires_at?: string;
+          delivery_at?: string | null;
+          expires_at?: string | null;
           extra_info?: Json | null;
           id?: number;
           in_stock?: number;
           ingredient_version?: number;
-          ordered_at?: string;
+          ordered_at?: string | null;
           status?: Database['public']['Enums']['ingredient_version_order_status'];
           status_changed_at?: string;
           unit?: string;
@@ -535,7 +538,18 @@ export interface Database {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      update_ingredient_in_stock: {
+        Args: {
+          ingredient_id: number;
+        };
+        Returns: undefined;
+      };
+      update_ingredient_version_in_stock: {
+        Args: {
+          ingredient_version_id: number;
+        };
+        Returns: undefined;
+      };
     };
     Enums: {
       ingredient_status: 'active' | 'preparation' | 'archived';
@@ -544,8 +558,6 @@ export interface Database {
         | 'ordered'
         | 'delivered'
         | 'canceled'
-        | 'returned'
-        | 'other'
         | 'expired';
       ingredient_version_removal_reason:
         | 'expired'

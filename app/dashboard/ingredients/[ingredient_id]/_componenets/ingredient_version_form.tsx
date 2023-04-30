@@ -4,7 +4,7 @@ import {
   Database,
   Ingredient,
   InsertIngredientVersion,
-} from '@/lib/database.types';
+} from '@/utils/db.types';
 
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -14,7 +14,7 @@ import Alert from '@/lib/ui/alert';
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { NumberInput, TextInput } from '@/lib/forms/inputs';
+import { NumberInput, TextInput } from '@/lib/forms';
 
 type IngredientVersionFormInput = InsertIngredientVersion;
 

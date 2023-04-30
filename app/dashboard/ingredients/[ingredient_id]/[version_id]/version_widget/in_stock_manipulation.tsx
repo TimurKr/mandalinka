@@ -1,9 +1,7 @@
 'use client';
 
-import Button from '@/components/button';
-import ConfirmationModal from '@/components/confirmation_modal';
-import { IngredientVersion } from '@/components/fetching/ingredient_detail';
-import { Unit } from '@/components/fetching/units';
+import Button from '@/lib/ui/button';
+import ConfirmationModal from '@/lib/ui/confirmation_modal';
 import {
   ArrowUpIcon,
   ChevronLeftIcon,
@@ -17,15 +15,30 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-export default function InStockManipulation({
-  ingredientVersion,
-  units,
-  CLIENT_API_URL,
-}: {
-  ingredientVersion: IngredientVersion;
-  units: Unit[];
-  CLIENT_API_URL: string;
-}) {
+import type {
+  Ingredient,
+  IngredientVersion,
+  IngredientVersionOrder,
+  IngredientVersionRemoval,
+  Unit,
+} from '@/utils/db.types';
+import { useStore } from '@/utils/zustand';
+
+type Props = {
+  ingredientVersion: Pick<
+    IngredientVersion,
+    'id' | 'in_stock' | 'status' | 'expiration_period'
+  > & {
+    unit: Pick<Unit, 'sign' | 'property'>;
+    orders: Pick<
+      IngredientVersionOrder,
+      'amount' | 'unit' | 'delivery_at' | 'expires_at' | 'status' | 'in_stock'
+    >[];
+    removals: Pick<IngredientVersionRemoval, 'amount'>[];
+  };
+};
+
+export default function InStockManipulation({ ingredientVersion }: Props) {
   const [showRemoveModal, setRemoveModal] = useState(false);
   const [showOrderModal, setOrderModal] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -39,12 +52,14 @@ export default function InStockManipulation({
     ssr: false,
   });
 
+  const units = useStore((state) => state.units);
+
   const futureOrders = ingredientVersion.orders
-    .filter((order) => !order.is_delivered)
+    .filter((order) => order.status === 'ordered')
     .map((order) => ({
       amount: order.amount,
-      unit: order.unit,
-      date: new Date(order.delivery_date)
+      unit: units.find((unit) => unit.sign === order.unit)!,
+      date: new Date(order.delivery_at)
         .toDateString()
         .split(' ')
         .slice(1, 3)
@@ -53,15 +68,16 @@ export default function InStockManipulation({
       type: 'Objednávka',
       remains: 0,
     }));
+
   const futureExpirations = ingredientVersion.orders
-    .filter((order) => new Date(order.expiration_date) > new Date())
+    .filter((order) => new Date(order.expires_at) > new Date())
     .filter((order) =>
-      order.is_delivered ? -order.in_stock_amount : -order.amount != 0
+      order.status === 'delivered' ? -order.in_stock : -order.amount != 0
     )
     .map((order) => ({
-      amount: order.is_delivered ? -order.in_stock_amount : -order.amount,
-      unit: order.unit,
-      date: new Date(order.expiration_date)
+      amount: order.status === 'delivered' ? -order.in_stock : -order.amount,
+      unit: units.find((unit) => unit.sign === order.unit)!,
+      date: new Date(order.expires_at)
         .toDateString()
         .split(' ')
         .slice(1, 3)
@@ -80,14 +96,14 @@ export default function InStockManipulation({
   for (let i = 0; i < futureStockChanges.length; i++) {
     if (i === 0) {
       futureStockChanges[i].remains =
-        ingredientVersion.in_stock_amount +
+        ingredientVersion.in_stock +
         futureStockChanges[i].amount *
-          parseFloat(futureStockChanges[i].unit.conversion_rate);
+          futureStockChanges[i].unit.conversion_rate;
     } else {
       futureStockChanges[i].remains =
         futureStockChanges[i - 1].remains +
         futureStockChanges[i].amount *
-          parseFloat(futureStockChanges[i].unit.conversion_rate);
+          futureStockChanges[i].unit.conversion_rate;
     }
   }
 
@@ -98,16 +114,17 @@ export default function InStockManipulation({
         onClose={() => setRemoveModal(false)}
         units={units}
         ingredientVersion={ingredientVersion}
-        submit_url={`${CLIENT_API_URL}/management/ingredients/new_stock_removal/`}
-        router={router}
       />
       <OrderModal
         show={showOrderModal}
         onClose={() => setOrderModal(false)}
         units={units}
-        ingredientVersion={ingredientVersion}
-        submit_url={`${CLIENT_API_URL}/management/ingredients/new_stock_order/`}
-        router={router}
+        ingredientVersion={{
+          ...ingredientVersion,
+          unit: units.find(
+            (unit) => unit.sign === ingredientVersion.unit.sign
+          )!,
+        }}
       />
 
       <div className="flex h-full items-center">
@@ -115,12 +132,12 @@ export default function InStockManipulation({
           variant="danger"
           onClick={() => setRemoveModal(true)}
           className="w-auto flex-none !p-2"
-          disabled={!ingredientVersion.in_stock_amount}
+          disabled={ingredientVersion.in_stock === 0}
         >
           <MinusIcon className="h-3 w-3" />
         </Button>
         <p className="flex-none px-3">
-          {ingredientVersion.in_stock_amount}{' '}
+          {ingredientVersion.in_stock}{' '}
           {ingredientVersion.unit.sign || 'Wrong unit'}
         </p>
 
@@ -128,7 +145,7 @@ export default function InStockManipulation({
           variant="success"
           onClick={() => setOrderModal(true)}
           className="w-auto flex-none !p-2"
-          disabled={!ingredientVersion.is_active}
+          disabled={ingredientVersion.status !== 'active'}
         >
           <PlusIcon className="h-3 w-3" />
         </Button>
@@ -155,9 +172,9 @@ export default function InStockManipulation({
                 </p>
                 <p className="text-sm">{data.date}</p>
                 <p className="text-sm">
-                  {data.remains}{' '}
-                  {ingredientVersion.unit.base_unit?.sign ||
-                    ingredientVersion.unit.sign}
+                  {data.remains} N/A
+                  {/* {ingredientVersion.unit.base_unit?.sign ||
+                    ingredientVersion.unit.sign} */}
                 </p>
               </div>
             ))}

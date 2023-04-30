@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 import Button from '@/lib/ui/button';
 import Alert from '@/lib/ui/alert';
 
-import type { Ingredient as FullIngredient } from '@/lib/database.types';
+import type { Ingredient as FullIngredient } from '@/utils/db.types';
 type Ingredient = Pick<FullIngredient, 'id' | 'name' | 'search_tags'>;
 
 export default function ClientSearch({

@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { useClientSupabase } from '@/lib/auth/client-supabase-provider';
+import { useSupabase } from '@/utils/supabase/client';
 import Alert from '@/lib/ui/alert';
 import Button from '@/lib/ui/button';
 import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
@@ -27,7 +27,7 @@ export default function Notification({
     user_id: string;
   };
 }) {
-  const supabase = useClientSupabase();
+  const supabase = useSupabase();
   const [isActive, setIsActive] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

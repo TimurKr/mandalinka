@@ -1,12 +1,12 @@
 'use client';
-import { useClientSupabase } from '@/lib/auth/client-supabase-provider';
+import { useSupabase } from '@/utils/supabase/client';
 import Button from '@/lib/ui/button';
 import { PostgrestError } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export default function SkipButton({ user_id }: { user_id: string }) {
-  const supabase = useClientSupabase();
+  const supabase = useSupabase();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<PostgrestError | null>(null);

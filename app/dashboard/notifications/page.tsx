@@ -1,7 +1,5 @@
-import {
-  getServerSupabase,
-  getServerUser,
-} from '@/lib/auth/server-supabase-provider';
+import { getServerUser } from '@/utils/auth/server';
+import { getServerSupabase } from '@/utils/supabase/server';
 import Notification from './_components/notification';
 
 export default async function Page() {

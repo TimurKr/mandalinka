@@ -5,19 +5,15 @@ import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
 
 import type { SupabaseClient } from '@supabase/auth-helpers-nextjs';
-import type { Database } from '@/lib/database.types';
+import type { Database } from '@/utils/db.types';
 
-type SupabaseContext = {
+export type SupabaseContext = {
   supabase: SupabaseClient<Database>;
 };
 
 const Context = createContext<SupabaseContext | undefined>(undefined);
 
-export default function SupabaseProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export function SupabaseProvider({ children }: { children: React.ReactNode }) {
   const [supabase] = useState(() => createBrowserSupabaseClient());
   const router = useRouter();
 
@@ -40,7 +36,7 @@ export default function SupabaseProvider({
   );
 }
 
-export const useClientSupabase = () => {
+export function useSupabase() {
   const context = useContext(Context);
 
   if (context === undefined) {
@@ -48,9 +44,4 @@ export const useClientSupabase = () => {
   }
 
   return context.supabase;
-};
-
-export async function useClientUser(supabase: SupabaseContext['supabase']) {
-  const { data, error } = await supabase.auth.getUser();
-  return data?.user;
 }

@@ -1,4 +1,4 @@
-import { getServerUser } from '@/lib/auth/server-supabase-provider';
+import { getServerUser } from '@/utils/auth/server';
 
 import { redirect } from 'next/navigation';
 

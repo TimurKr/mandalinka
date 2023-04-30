@@ -10,14 +10,14 @@ import Graph from './graph';
 // import StatusManipulation from "./status_manipulation";
 import { Suspense } from 'react';
 import Loading from '@/lib/ui/loading_element';
-import { getServerSupabase } from '@/lib/auth/server-supabase-provider';
-import { getArray, getSingle } from '@/lib/supabase/fetch-helpers';
+import { getServerSupabase } from '@/utils/supabase/server';
+import { getArray, getSingle } from '@/utils/fetch/helpers';
 import OrdersTable from './orders_table';
-import VersionSelector from '../../_componenets/version_selector';
 import RemovalsTable from './removals_table';
 import IngredientVersionForm from '../../_componenets/ingredient_version_form';
-
-// const OrdersTable = dynamic(() => import("./orders_table"), { ssr: false });
+import InStockManipulation from './in_stock_manipulation';
+import StatusManipulation from './status_manipulation';
+import { useStore } from '@/utils/zustand';
 
 // const RemovalsTable = dynamic(() => import("./removals_table"), { ssr: false });
 
@@ -29,18 +29,6 @@ export default async function IngredientVersionWidget({
   version_id: number;
 }) {
   const supabase = getServerSupabase();
-
-  const versionsPromise = supabase
-    .from('ingredient_version')
-    .select(
-      `
-      id,
-      status,
-      created_at
-      `
-    )
-    .eq('ingredient', ingredient_id)
-    .throwOnError();
 
   const currentVersionPromise = supabase
     .from('ingredient_version')
@@ -57,6 +45,7 @@ export default async function IngredientVersionWidget({
       ingredient (unit),
       orders:ingredient_version_order (
         id,
+        ingredient_version,
         status,
         ordered_at,
         delivery_at,
@@ -64,7 +53,8 @@ export default async function IngredientVersionWidget({
         amount, 
         unit,
         in_stock,
-        cost
+        cost,
+        status_changed_at
         ),
       removals:ingredient_version_removal (
         id,
@@ -88,36 +78,37 @@ export default async function IngredientVersionWidget({
     .single()
     .throwOnError();
 
-  const unitsPromise = supabase.from('unit').select('*').throwOnError();
+  const [{ data: currentVersionData, error: currentVersionError }] =
+    await Promise.all([currentVersionPromise]);
 
-  const [
-    { data: versionsData, error: versionsError },
-    { data: currentVersionData, error: currentVersionError },
-    { data: units, error: unitsError },
-  ] = await Promise.all([versionsPromise, currentVersionPromise, unitsPromise]);
-
-  if (
-    versionsError ||
-    unitsError ||
-    currentVersionError ||
-    !versionsData ||
-    !currentVersionData ||
-    !units
-  ) {
+  if (currentVersionError || !currentVersionData) {
     throw new Error(
-      'Error loading ingredient: ' + versionsError?.message ||
-        currentVersionError?.message ||
-        unitsError?.message ||
+      'Error loading ingredient: ' + currentVersionError?.message ||
         "Didn't receive data from server"
     );
   }
 
-  const versions = versionsData;
+  const units = useStore.getState().units;
 
   const currentVersion = {
     ...currentVersionData,
     unit: getSingle(getSingle(currentVersionData.ingredient).unit),
-    orders: getArray(currentVersionData.orders),
+    orders: getArray(currentVersionData.orders).sort(
+      // First, awaiting order, then ordered, then delivered then rest, secondly by status_changed_at
+      (a, b) => {
+        const statusOrder = {
+          awaiting_order: 0,
+          ordered: 1,
+          delivered: 2,
+          canceled: 3,
+          expired: 3,
+        };
+        return (
+          statusOrder[a.status] - statusOrder[b.status] ||
+          (a.status_changed_at < b.status_changed_at ? 1 : -1)
+        );
+      }
+    ),
     removals: getArray(currentVersionData.removals),
     ingredient: getSingle(currentVersionData.ingredient),
   };
@@ -142,20 +133,14 @@ export default async function IngredientVersionWidget({
         <div className="flex-auto">
           <BorderedElement title="Objednávky">
             <Suspense fallback={<Loading />}>
-              <OrdersTable
-                data={currentVersion.orders}
-                modify_url={`${process.env.CLIENT_API_URL}/management/ingredients/stock_orders/`}
-              />
+              <OrdersTable data={currentVersion.orders} />
             </Suspense>
           </BorderedElement>
         </div>
         <div className="flex-auto">
           <BorderedElement title="Odpisy">
             <Suspense fallback={<Loading />}>
-              <RemovalsTable
-                data={currentVersion.removals}
-                delete_url={`${process.env.CLIENT_API_URL}/management/ingredients/stock_removals/`}
-              />
+              <RemovalsTable data={currentVersion.removals} />
             </Suspense>
           </BorderedElement>
         </div>
@@ -169,26 +154,33 @@ export default async function IngredientVersionWidget({
             </BorderedElement>
           </div>
         )}
-        {/* {(current_version.is_active ||
-            current_version.orders.length > 0 ||
-            current_version.removals.length > 0 ||
-            current_version.in_stock_amount > 0) && (
-            <div className="flex-initial">
-              <BorderedElement title="Na sklade" className="!p-3 !pr-1">
-                <InStockManipulation
-                  ingredientVersion={current_version}
-                  units={units}
-                  CLIENT_API_URL={process.env.CLIENT_API_URL || ""}
-                />
-              </BorderedElement>
-            </div>
-          )} */}
+        {(currentVersion.status === 'active' ||
+          currentVersion.orders.length > 0 ||
+          currentVersion.removals.length > 0 ||
+          currentVersion.in_stock > 0) && (
+          <div className="flex-initial">
+            <BorderedElement title="Na sklade" className="!p-3 !pr-1">
+              <InStockManipulation
+                ingredientVersion={{
+                  ...currentVersion,
+                  unit: useStore
+                    .getState()
+                    .units.find((u) => u.sign === currentVersion.unit)!,
+                }}
+              />
+            </BorderedElement>
+          </div>
+        )}
         <div>
           <BorderedElement title="Zmena statusu" className="pt-3">
-            {/* <StatusManipulation
-                ingredientVersion={current_version}
-                CLIENT_API_URL={process.env.CLIENT_API_URL || ""}
-              /> */}
+            <StatusManipulation
+              ingredientVersion={{
+                ...currentVersion,
+                ingredient: ingredient_id,
+                orders_count: currentVersion.orders.length,
+                removals_count: currentVersion.removals.length,
+              }}
+            />
           </BorderedElement>
         </div>
       </div>

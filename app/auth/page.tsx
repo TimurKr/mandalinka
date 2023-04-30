@@ -1,6 +1,6 @@
 import { redirect, useSearchParams } from 'next/navigation';
 import Authentificate from './auth_element';
-import { getServerUser } from '@/lib/auth/server-supabase-provider';
+import { getServerUser } from '@/utils/auth/server';
 
 export const revalidate = 0;
 

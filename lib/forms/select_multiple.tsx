@@ -1,20 +1,22 @@
 import { useField, Field } from 'formik';
 import { BorderedElement } from '@/lib/ui/bordered_element';
-import ErrorMessage from '../error_message';
+import ErrorMessage from './error_message';
 
 export type Option = { value: string | number; label: string };
 
-const SelectMultipleField = ({
+export default function RawSelectMultipleInput({
   name,
   options,
   label,
   helperText,
+  disabled,
 }: {
   name: string;
   options: Option[];
   label?: string;
   helperText?: string;
-}) => {
+  disabled?: boolean;
+}) {
   const [field, meta, helper] = useField(name);
 
   return (
@@ -36,6 +38,7 @@ const SelectMultipleField = ({
                 name={name}
                 value={option.value}
                 checked={field.value.includes(option.value)}
+                disabled={disabled}
                 onChange={(e: any) => {
                   const checked = e.target.checked;
                   const value = option.value;
@@ -47,12 +50,6 @@ const SelectMultipleField = ({
                     newValue = currentValue.filter((v: string) => v !== value);
                   }
                   helper.setValue(newValue);
-                  console.log(
-                    'Just change value of ',
-                    field.name,
-                    ' to : ',
-                    newValue
-                  );
                 }}
                 className="peer hidden"
               />
@@ -73,6 +70,4 @@ const SelectMultipleField = ({
       )}
     </>
   );
-};
-
-export default SelectMultipleField;
+}

@@ -2,12 +2,14 @@
 
 import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { useClientSupabase } from '@/lib/auth/client-supabase-provider';
+import { useSupabase } from '@/utils/supabase/client';
+import { useStore } from '@/utils/zustand';
+import { shallow } from 'zustand/shallow';
 
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
-import type { InsertIngredient } from '@/lib/database.types';
+import type { InsertIngredient } from '@/utils/db.types';
 
 import Alert from '@/lib/ui/alert';
 import Button from '@/lib/ui/button';
@@ -15,10 +17,9 @@ import {
   TextArea,
   TextInput,
   FileInput,
-  Option,
   SelectInput,
   SelectMultipleInput,
-} from '@/lib/forms/inputs';
+} from '@/lib/forms';
 
 type FormValues = {
   name: string;
@@ -38,16 +39,15 @@ const validationSchema = Yup.object().shape({
   unit: Yup.string().required('Povinné pole'),
 });
 
-export default function AddIngredientForm({
-  alergens,
-  units,
-}: {
-  alergens: Option[];
-  units: Option[];
-}) {
+export default function AddIngredientForm() {
   const [error, setError] = useState<string | null>(null);
-  const supabase = useClientSupabase();
+  const supabase = useSupabase();
   const router = useRouter();
+
+  const { units, alergens } = useStore(
+    (state) => ({ units: state.units, alergens: state.alergens }),
+    shallow
+  );
 
   const handleSubmit = useCallback(
     async (values: FormValues) => {
@@ -134,7 +134,7 @@ export default function AddIngredientForm({
     search_tags: '',
     img: '',
     alergens: [],
-    unit: units[0].value.toString(),
+    unit: units.find((u) => u.sign === 'g')?.sign!,
   };
 
   return (
@@ -155,11 +155,18 @@ export default function AddIngredientForm({
         />
         <FileInput name="img" label="Obrázok" />
 
-        <SelectInput name="unit" label="Jednotka" options={units} />
+        <SelectInput
+          name="unit"
+          label="Jednotka"
+          options={units.map((u) => ({ value: u.sign, label: u.name }))}
+        />
         <SelectMultipleInput
           name="alergens"
           label="Alergény"
-          options={alergens}
+          options={alergens.map((a) => ({
+            value: a.id.toString(),
+            label: a.label,
+          }))}
           helperText="Zvolte všetky aplikovatelné"
         />
 

@@ -1,7 +1,7 @@
 // import { Ingredient } from "@/components/fetching/ingredients_list";
 import Button from '@/lib/ui/button';
 
-import { getServerSupabase } from '@/lib/auth/server-supabase-provider';
+import { getServerSupabase } from '@/utils/supabase/server';
 
 import ClientSearch from './client';
 

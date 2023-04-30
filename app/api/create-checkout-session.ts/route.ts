@@ -1,11 +1,9 @@
 import { NextRequest } from 'next/server';
-import {
-  getServerSupabase,
-  getServerUser,
-} from '@/lib/auth/server-supabase-provider';
-import { stripe } from '@/lib/stripe/stripe';
-import { createOrRetrieveCustomer } from '@/lib/stripe/webhook_updates';
-import { getURL } from '@/lib/helpers';
+import { getServerUser } from '@/utils/auth/server';
+import { getServerSupabase } from '@/utils/supabase/server';
+import { stripe } from '@/utils/stripe/stripe';
+import { createOrRetrieveCustomer } from '@/utils/stripe/webhook_updates';
+import { getURL } from '@/utils/helpers';
 
 export async function POST(req: NextRequest) {
   const { price, quantity = 1, metadata = {} } = await req.json();

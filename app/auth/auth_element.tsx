@@ -2,10 +2,10 @@
 import { Auth } from '@supabase/auth-ui-react';
 import { ViewType } from '@supabase/auth-ui-shared';
 
-import { useClientSupabase } from '@/lib/auth/client-supabase-provider';
+import { useSupabase } from '@/utils/supabase/client';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { getURL } from '@/lib/helpers';
+import { getURL } from '@/utils/helpers';
 
 export const revalidate = 0;
 
@@ -28,7 +28,7 @@ export default function Authentificate({
   view?: string;
 }) {
   // Hooks
-  const supabase = useClientSupabase();
+  const supabase = useSupabase();
 
   return (
     <>

@@ -4,10 +4,9 @@ import { Route } from 'next';
 
 import Favicon from '@/public/favicon.ico';
 
-import {
-  getServerUser,
-  getServerSupabase,
-} from '@/lib/auth/server-supabase-provider';
+import { getServerUser } from '@/utils/auth/server';
+import { getServerSupabase } from '@/utils/supabase/server';
+
 import Button from '@/lib/ui/button';
 
 const authentificated_pages = [

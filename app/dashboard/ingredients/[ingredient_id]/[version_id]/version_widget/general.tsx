@@ -1,4 +1,4 @@
-import type { IngredientVersion } from '@/lib/database.types';
+import type { IngredientVersion } from '@/utils/db.types';
 
 type Props = {
   data: Pick<IngredientVersion, 'source' | 'cost'> & {

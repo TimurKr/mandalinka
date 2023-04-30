@@ -1,5 +1,5 @@
-import { getServerSupabase } from '@/lib/auth/server-supabase-provider';
-import { getArray } from '@/lib/supabase/fetch-helpers';
+import { getServerSupabase } from '@/utils/supabase/server';
+import { getArray } from '@/utils/fetch/helpers';
 import { notFound, redirect } from 'next/navigation';
 
 export default async function Ingredient({

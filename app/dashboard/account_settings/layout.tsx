@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { getServerUser } from '@/lib/auth/server-supabase-provider';
+import { getServerUser } from '@/utils/auth/server';
 import Navigation from './navigation';
 
 export default async function Layout({

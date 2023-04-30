@@ -4,7 +4,7 @@ import { PlusCircleIcon } from '@heroicons/react/24/outline';
 
 import Button from '@/lib/ui/button';
 
-import type { IngredientVersion } from '@/lib/database.types';
+import type { IngredientVersion } from '@/utils/db.types';
 import { useParams, useSelectedLayoutSegment } from 'next/navigation';
 
 type IngredientVersions = Pick<
@@ -36,12 +36,11 @@ export default function VersionSelector({
   );
 
   if (!currentVersion && segment !== 'new_version') {
-    console.log(currentVersion);
     return <p>NotFound</p>;
   }
 
   return (
-    <div className="flex w-full flex-nowrap gap-2 overflow-x-auto p-2">
+    <div className="flex w-full flex-nowrap items-center gap-2 overflow-x-auto p-2">
       <Button
         href={`/dashboard/ingredients/${params.ingredient_id}/new_version`}
         variant="primary"
@@ -51,24 +50,30 @@ export default function VersionSelector({
       >
         <PlusCircleIcon className="h-6 w-6" />
       </Button>
-      {versions.map((version, index) => (
-        <Button
-          key={version.id}
-          className="w-auto flex-none align-middle"
-          href={`/dashboard/ingredients/${params.ingredient_id}/${version.id}`}
-          variant={
-            version.status == 'active'
-              ? 'success'
-              : version.status === 'preparation'
-              ? 'warning'
-              : 'danger'
-          }
-          dark={segment == version.id.toString()}
-          disabled={segment == version.id.toString()}
-        >
-          Verzia - {index + 1}
-        </Button>
-      ))}
+      {versions.length > 0 ? (
+        versions.map((version, index) => (
+          <Button
+            key={version.id}
+            className="w-auto flex-none align-middle"
+            href={`/dashboard/ingredients/${params.ingredient_id}/${version.id}`}
+            variant={
+              version.status == 'active'
+                ? 'success'
+                : version.status === 'preparation'
+                ? 'warning'
+                : 'danger'
+            }
+            dark={segment == version.id.toString()}
+            disabled={segment == version.id.toString()}
+          >
+            v.{index + 1}
+          </Button>
+        ))
+      ) : (
+        <p className="cursor-default ps-1 text-sm text-slate-500">
+          Žiadne verzie
+        </p>
+      )}
     </div>
   );
 }
