@@ -40,14 +40,7 @@ export default function OrderModal({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const router = useRouter();
 
-  async function handleSubmit(
-    values: InsertIngredientVersionOrder,
-    {
-      setFieldError,
-    }: {
-      setFieldError: (field: string, errorMsg: string) => void;
-    }
-  ) {
+  async function handleSubmit(values: InsertIngredientVersionOrder) {
     if (values.status === 'delivered') {
       values.in_stock = values.amount;
     }
@@ -77,11 +70,7 @@ export default function OrderModal({
       }
     }
 
-    startTransition(() => {
-      setErrorMessage(null);
-      onClose();
-      router.refresh();
-    });
+    location.reload();
   }
 
   const initialValues = {

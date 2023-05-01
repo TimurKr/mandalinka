@@ -11,55 +11,33 @@ import {
   PlusCircleIcon,
   PlusIcon,
 } from '@heroicons/react/24/outline';
-import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-import type {
-  Ingredient,
-  IngredientVersion,
-  IngredientVersionOrder,
-  IngredientVersionRemoval,
-  Unit,
-} from '@/utils/db.types';
 import { useStore } from '@/utils/zustand';
+import { useIngredientVersionStore } from '../store';
+import RemoveModal from './removal_modal';
+import OrderModal from './order_modal';
 
-type Props = {
-  ingredientVersion: Pick<
-    IngredientVersion,
-    'id' | 'in_stock' | 'status' | 'expiration_period'
-  > & {
-    unit: Pick<Unit, 'sign' | 'property'>;
-    orders: Pick<
-      IngredientVersionOrder,
-      'amount' | 'unit' | 'delivery_at' | 'expires_at' | 'status' | 'in_stock'
-    >[];
-    removals: Pick<IngredientVersionRemoval, 'amount'>[];
-  };
-};
-
-export default function InStockManipulation({ ingredientVersion }: Props) {
+export default function InStockManipulation() {
   const [showRemoveModal, setRemoveModal] = useState(false);
   const [showOrderModal, setOrderModal] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
   const router = useRouter();
 
-  const RemoveModal = dynamic(() => import('./remove_stock_modal'), {
-    ssr: false,
-  });
-  const OrderModal = dynamic(() => import('./order_stock_modal'), {
-    ssr: false,
-  });
+  const currentVersion = useIngredientVersionStore(
+    (state) => state.currentVersion
+  );
 
   const units = useStore((state) => state.units);
 
-  const futureOrders = ingredientVersion.orders
+  const futureOrders = currentVersion.orders
     .filter((order) => order.status === 'ordered')
     .map((order) => ({
+      ...order,
       amount: order.amount,
-      unit: units.find((unit) => unit.sign === order.unit)!,
-      date: new Date(order.delivery_at)
+      date: new Date(order.delivery_at!)
         .toDateString()
         .split(' ')
         .slice(1, 3)
@@ -69,15 +47,11 @@ export default function InStockManipulation({ ingredientVersion }: Props) {
       remains: 0,
     }));
 
-  const futureExpirations = ingredientVersion.orders
-    .filter((order) => new Date(order.expires_at) > new Date())
-    .filter((order) =>
-      order.status === 'delivered' ? -order.in_stock : -order.amount != 0
-    )
+  const futureExpirations = currentVersion.orders
+    .filter((order) => order.status === 'delivered')
     .map((order) => ({
-      amount: order.status === 'delivered' ? -order.in_stock : -order.amount,
-      unit: units.find((unit) => unit.sign === order.unit)!,
-      date: new Date(order.expires_at)
+      ...order,
+      date: new Date(order.expires_at!)
         .toDateString()
         .split(' ')
         .slice(1, 3)
@@ -96,7 +70,7 @@ export default function InStockManipulation({ ingredientVersion }: Props) {
   for (let i = 0; i < futureStockChanges.length; i++) {
     if (i === 0) {
       futureStockChanges[i].remains =
-        ingredientVersion.in_stock +
+        currentVersion.in_stock +
         futureStockChanges[i].amount *
           futureStockChanges[i].unit.conversion_rate;
     } else {
@@ -113,18 +87,13 @@ export default function InStockManipulation({ ingredientVersion }: Props) {
         show={showRemoveModal}
         onClose={() => setRemoveModal(false)}
         units={units}
-        ingredientVersion={ingredientVersion}
+        ingredientVersion={currentVersion}
       />
       <OrderModal
         show={showOrderModal}
         onClose={() => setOrderModal(false)}
         units={units}
-        ingredientVersion={{
-          ...ingredientVersion,
-          unit: units.find(
-            (unit) => unit.sign === ingredientVersion.unit.sign
-          )!,
-        }}
+        ingredientVersion={currentVersion}
       />
 
       <div className="flex h-full items-center">
@@ -132,20 +101,19 @@ export default function InStockManipulation({ ingredientVersion }: Props) {
           variant="danger"
           onClick={() => setRemoveModal(true)}
           className="w-auto flex-none !p-2"
-          disabled={ingredientVersion.in_stock === 0}
+          disabled={currentVersion.in_stock === 0}
         >
           <MinusIcon className="h-3 w-3" />
         </Button>
         <p className="flex-none px-3">
-          {ingredientVersion.in_stock}{' '}
-          {ingredientVersion.unit.sign || 'Wrong unit'}
+          {currentVersion.in_stock} {currentVersion.unit.sign || 'Wrong unit'}
         </p>
 
         <Button
           variant="success"
           onClick={() => setOrderModal(true)}
           className="w-auto flex-none !p-2"
-          disabled={ingredientVersion.status !== 'active'}
+          disabled={currentVersion.status !== 'active'}
         >
           <PlusIcon className="h-3 w-3" />
         </Button>

@@ -5,7 +5,7 @@ export default function ConfirmationModal({
   show,
   onClose,
   onConfirm,
-  confirmText,
+  confirmText = 'Potvrdiť',
   cancelText = 'Zrušiť',
   variant = 'danger',
   dismissible = true,
@@ -19,7 +19,7 @@ export default function ConfirmationModal({
   show: boolean;
   onClose: () => void;
   onConfirm: (e: React.FormEvent | undefined) => void;
-  confirmText: string;
+  confirmText?: string;
   variant?:
     | 'danger'
     | 'warning'
