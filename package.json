@@ -8,8 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "stripe:listen": "stripe listen --forward-to=localhost:3000/api/webhooks",
-    "load_types_from_supabase": "supabase gen types typescript --project-id vfjhajpnrcibrusjlakv --schema public > lib/database.types.ts",
-    "include_better_types": "better-supabase-types -i lib/database.types.ts -f",
+    "load_types_from_supabase": "supabase gen types typescript --project-id vfjhajpnrcibrusjlakv --schema public > utils/db.types.ts",
+    "include_better_types": "better-supabase-types -i utils/db.types.ts -f",
     "gen_types": "npm run load_types_from_supabase && npm run include_better_types",
     "prettify": "prettier --write app lib utils"
   },

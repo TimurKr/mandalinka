@@ -187,6 +187,7 @@ export interface Database {
           source: string;
           status: Database['public']['Enums']['ingredient_status'];
           status_changed_at: string;
+          version_number: number;
         };
         Insert: {
           cost?: number | null;
@@ -198,6 +199,7 @@ export interface Database {
           source: string;
           status?: Database['public']['Enums']['ingredient_status'];
           status_changed_at?: string;
+          version_number?: number;
         };
         Update: {
           cost?: number | null;
@@ -209,6 +211,7 @@ export interface Database {
           source?: string;
           status?: Database['public']['Enums']['ingredient_status'];
           status_changed_at?: string;
+          version_number?: number;
         };
       };
       ingredient_version_order: {

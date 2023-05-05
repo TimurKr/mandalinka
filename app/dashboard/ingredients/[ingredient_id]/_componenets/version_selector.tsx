@@ -7,29 +7,16 @@ import Button from '@/lib/ui/button';
 import type { IngredientVersion } from '@/utils/db.types';
 import { useParams, useSelectedLayoutSegment } from 'next/navigation';
 
-type IngredientVersions = Pick<
-  IngredientVersion,
-  'id' | 'status' | 'created_at'
->[];
-
 export default function VersionSelector({
   versions,
 }: {
-  versions: IngredientVersions;
+  versions: Pick< IngredientVersion, 'id' | 'status' | 'version_number'>[];
 }) {
   const segment = useSelectedLayoutSegment();
   const params = useParams();
 
   // sort versions by the creation date
-  versions.sort((a, b) => {
-    if (new Date(a.created_at) > new Date(b.created_at)) {
-      return 1;
-    } else if (new Date(a.created_at) < new Date(b.created_at)) {
-      return -1;
-    } else {
-      return 0;
-    }
-  });
+  versions.sort((a, b) => b.version_number - a.version_number);
 
   const currentVersion = versions.find(
     (version) => version.id.toString() === segment
@@ -66,7 +53,7 @@ export default function VersionSelector({
             dark={segment == version.id.toString()}
             disabled={segment == version.id.toString()}
           >
-            v.{index + 1}
+            v.{version.version_number}
           </Button>
         ))
       ) : (

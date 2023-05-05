@@ -2,7 +2,6 @@ import 'server-only';
 
 import React from 'react';
 
-import IngredientVersionWidget from '../[version_id]/_components';
 import IngredientVersionForm from '../_componenets/ingredient_version_form';
 import { BorderedElement } from '@/lib/ui/bordered_element';
 import VersionSelector from '../_componenets/version_selector';

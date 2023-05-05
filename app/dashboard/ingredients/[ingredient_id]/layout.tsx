@@ -32,7 +32,7 @@ export default async function Layout({
       unit,
       alergens:alergen (id, label),
       extra_info,
-      versions:ingredient_version (id, status, created_at)
+      versions:ingredient_version (id, status, version_number)
     `
     )
     .eq('id', params.ingredient_id)
@@ -93,7 +93,7 @@ export default async function Layout({
       </div>
       <div className="aspect-square shrink-0 basis-full p-2 md:basis-1/3">
         <ImageElement
-          path={ingredient.img ? 'ingredients/' + ingredient.img : undefined}
+          path={ingredient.img ?? undefined}
         />
       </div>
       <div className="shrink-0 flex-grow basis-full p-2 md:basis-2/3">
