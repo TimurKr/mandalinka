@@ -134,11 +134,13 @@ export function StatusManipulationIcon({
       .from('ingredient_version_order')
       .update({
         id: order_id,
+        status,
         ordered_at: status === 'ordered' ? date?.toISOString() : undefined,
         delivery_at: status === 'delivered' ? date?.toISOString() : undefined,
         in_stock: status === 'delivered' ? order.id : 0,
       })
       .eq('id', order_id);
+    console.log(status);
     if (statusChangeError) {
       setErrorMessage(statusChangeError.message);
       setIsSubmitting(false);
@@ -176,7 +178,12 @@ export function StatusManipulationIcon({
       }
     }
 
-    location.reload();
+    startTransition(() => {
+      router.refresh();
+      setIsSubmitting(false);
+      setErrorMessage(null);
+      setShowConfirmation(false);
+    });
   }
 
   const Icon = mapper[status].icon;

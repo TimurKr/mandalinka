@@ -59,7 +59,7 @@ export default function Button<T extends string>(
   } else {
     return (
       // Spread all props to the button, but override the className
-      <button {...props} className={buttonClassName}>
+      <button {...{...props, dark: undefined}} className={buttonClassName}>
         {props.children}
       </button>
     );

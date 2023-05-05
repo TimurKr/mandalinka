@@ -38,7 +38,8 @@ export default function StatusManipulation({
         setErrorMessage(error.message);
       } else {
         return startTransition(() => {
-          router.refresh(), setConfirmStatus(null);
+          router.refresh();
+          setConfirmStatus(null);
         });
       }
       return;
@@ -52,7 +53,8 @@ export default function StatusManipulation({
       setErrorMessage(error.message);
     } else {
       return startTransition(() => {
-        router.refresh(), setConfirmStatus(null);
+        setConfirmStatus(null);
+        router.refresh();
       });
     }
   }
