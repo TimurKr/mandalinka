@@ -29,27 +29,27 @@ const customer_pages = [
 ];
 
 const staff_pages = [
-  {
-    title: 'Menu',
-    href: '/dashboard/menus' as Route,
-    icon: 'menu_book',
-  },
-  {
-    title: 'Recepty',
-    href: '/dashboard/recipes' as Route,
-    icon: 'ramen_dining',
-  },
-  {
-    title: 'Suroviny',
-    href: '/dashboard/ingredients' as Route,
-    icon: 'egg_alt',
-  },
-  {
-    title: 'Supabase',
-    href: 'https://app.supabase.com/' as Route,
-    icon: 'bolt',
-  },
-];
+  // {
+  //   title: 'Menu',
+  //   href: '/dashboard/menus' as Route,
+  //   icon: 'menu_book',
+  // },
+  // {
+  //   title: 'Recepty',
+  //   href: '/dashboard/recipes' as Route,
+  //   icon: 'ramen_dining',
+  // },
+  // {
+  //   title: 'Suroviny',
+  //   href: '/dashboard/ingredients' as Route,
+  //   icon: 'egg_alt',
+  // },
+  // {
+  //   title: 'Supabase',
+  //   href: 'https://app.supabase.com/' as Route,
+  //   icon: 'bolt',
+  // },
+] as typeof customer_pages;
 
 export default function Navigation({
   is_staff,
