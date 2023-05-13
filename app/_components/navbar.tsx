@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { Route } from 'next';
 
 import Favicon from '@/public/favicon.ico';
 
@@ -12,7 +11,7 @@ import Button from '@/lib/ui/button';
 const authentificated_pages = [
   {
     title: 'Dashboard',
-    url: '/dashboard' as Route,
+    url: '/dashboard',
     dark: false,
   },
 ];
@@ -20,12 +19,12 @@ const authentificated_pages = [
 const unauthentificated_pages = [
   {
     title: 'Prihlásiť sa',
-    url: '/auth?view=sign_in' as Route,
+    url: '/auth?view=sign_in',
     dark: false,
   },
   {
     title: 'Zaregistrovať',
-    url: '/auth?view=sign_up' as Route,
+    url: '/auth?view=sign_up',
     dark: true,
   },
 ];

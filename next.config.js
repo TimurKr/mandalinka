@@ -7,7 +7,7 @@ const nextConfig = {
   swcMinify: true,
   experimental: {
     appDir: true,
-    typedRoutes: true,
+    // typedRoutes: true,
   },
   images: {
     // loader: 'custom',

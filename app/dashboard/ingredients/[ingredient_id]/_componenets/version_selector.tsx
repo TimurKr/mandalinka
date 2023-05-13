@@ -42,7 +42,8 @@ export default function VersionSelector({
           <Button
             key={version.id}
             className="w-auto flex-none align-middle"
-            href={`/dashboard/ingredients/${params.ingredient_id}/${version.id}`}
+            // href={`/dashboard/ingredients/${params.ingredient_id}/${version.id.toString()}`}
+            onClick={() => {}}
             variant={
               version.status == 'active'
                 ? 'success'

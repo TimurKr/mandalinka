@@ -3,27 +3,26 @@
 import Link from 'next/link';
 import { useSelectedLayoutSegment } from 'next/navigation';
 import LogoutButton from './logout-button';
-import { Route } from 'next';
 
 const customer_pages = [
   {
     title: 'Objednávky',
-    href: '/dashboard/my_orders' as Route,
+    href: '/dashboard/my_orders',
     icon: 'list_alt',
   },
   {
     title: 'História',
-    href: '/dashboard/history' as Route,
+    href: '/dashboard/history',
     icon: 'history',
   },
   {
     title: 'Notifikácie',
-    href: '/dashboard/notifications' as Route,
+    href: '/dashboard/notifications',
     icon: 'notifications',
   },
   {
     title: 'Nastavenia',
-    href: '/dashboard/account_settings' as Route,
+    href: '/dashboard/account_settings',
     icon: 'manage_accounts',
   },
 ];
@@ -31,22 +30,22 @@ const customer_pages = [
 const staff_pages = [
   {
     title: 'Menu',
-    href: '/dashboard/menus' as Route,
+    href: '/dashboard/menus',
     icon: 'menu_book',
   },
   {
     title: 'Recepty',
-    href: '/dashboard/recipes' as Route,
+    href: '/dashboard/recipes',
     icon: 'ramen_dining',
   },
   {
     title: 'Suroviny',
-    href: '/dashboard/ingredients' as Route,
+    href: '/dashboard/ingredients',
     icon: 'egg_alt',
   },
   {
     title: 'Supabase',
-    href: 'https://app.supabase.com/' as Route,
+    href: 'https://app.supabase.com/',
     icon: 'bolt',
   },
 ];

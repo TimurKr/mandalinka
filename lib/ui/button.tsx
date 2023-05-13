@@ -1,11 +1,10 @@
 'use client';
 
-import type { Route } from 'next';
 import Link from 'next/link';
 
-export default function Button<T extends string>(
+export default function Button(
   props: Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'href'> & {
-    href?: Route<T> | URL;
+    href?: string;
     variant:
       | 'primary'
       | 'secondary'

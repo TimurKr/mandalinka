@@ -160,7 +160,7 @@ export default function ClientSearch({
                 //     : 'black'
                 // }
                 dark={currentIngredient?.id === ingredient.id}
-                href={`/dashboard/ingredients/${ingredient.id}`}
+                href={`/dashboard/ingredients/${ingredient.id.toString()}`}
                 className="inline"
                 // className={`inline ${
                 //   !ingredient.isActive &&

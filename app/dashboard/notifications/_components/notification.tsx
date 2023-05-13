@@ -2,17 +2,12 @@
 import React from 'react';
 import { useSupabase } from '@/utils/supabase/client';
 import Alert from '@/lib/ui/alert';
-import Button from '@/lib/ui/button';
-import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
-import { Dropdown } from 'flowbite-react';
-import { truncate } from 'fs';
 import { useState } from 'react';
 import {
   MdOutlineMarkEmailUnread,
   MdOutlineMarkEmailRead,
   MdLink,
 } from 'react-icons/md';
-import { HiOutlineLink } from 'react-icons/hi2';
 
 export default function Notification({
   notification,
